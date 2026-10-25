@@ -132,7 +132,16 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 .hud-btns{position:absolute;top:70px;left:var(--gut-l);right:var(--gut-r);z-index:9;display:flex;justify-content:space-between;pointer-events:none}
 .hud-btns button{pointer-events:auto;width:34px;height:30px;display:grid;place-items:center;background:rgba(4,19,26,.78);border:2px solid var(--line);color:var(--foam);font-family:var(--font-pixel);font-size:14px}
 .hud-btns button:hover{border-color:var(--arc)}
-.hud-btns button svg{width:18px;height:18px}
+.hud-btns button svg,.hud-btns a svg{width:18px;height:18px}
+.hud-btns .grp{display:flex;gap:6px}
+.hud-btns a{pointer-events:auto;width:34px;height:30px;display:grid;place-items:center;background:rgba(4,19,26,.78);border:2px solid var(--line)}
+.hud-btns a:hover{border-color:var(--arc)}
+.scene.at-start .hud-btns{top:10px}
+.scene.at-start .fact,.scene.at-start .ruler,.scene.at-start .zone{opacity:0}
+.fact,.ruler,.zone{transition:opacity .6s}
+.fsbtn{display:flex;align-items:center;justify-content:center;gap:8px;font-family:var(--font-pixel);font-weight:700;font-size:14px;letter-spacing:.12em;color:var(--foam);text-decoration:none;background:rgba(9,32,41,.85);border:2px solid var(--line);padding:9px 12px}
+.fsbtn:hover{border-color:var(--arc)}
+.fsbtn svg{width:16px;height:16px}
 .scene.at-start .hud{opacity:0}
 
 /* ---------- prompt card ---------- */
@@ -162,14 +171,15 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 .btn.big{width:100%;font-size:19px;padding:16px 10px}
 
 /* ---------- start screen ---------- */
-.start{position:absolute;inset:0;z-index:10;display:flex;flex-direction:column;justify-content:space-between;padding-block:max(28px,6vh) 18px;padding-left:var(--gut-l);padding-right:var(--gut-r);pointer-events:none}
+.start{position:absolute;inset:0;z-index:10;display:flex;flex-direction:column;justify-content:space-between;gap:16px;overflow-y:auto;padding-block:52px 16px;padding-left:var(--gut-l);padding-right:var(--gut-r);pointer-events:none}
 .start>*{pointer-events:auto}
 .title-block{text-align:center;display:flex;flex-direction:column;align-items:center;gap:10px}
 .wordmark{margin:0;font-family:var(--font-pixel);font-weight:700;font-size:clamp(44px,13.5vw,64px);line-height:.95;letter-spacing:.04em;color:#f3fff0;text-shadow:-3px 0 0 rgba(255,111,156,.85),3px 0 0 rgba(79,214,240,.85),0 4px 0 rgba(10,29,36,.35);animation:glitch 6s steps(1) infinite}
 @keyframes glitch{0%,92%,100%{text-shadow:-3px 0 0 rgba(255,111,156,.85),3px 0 0 rgba(79,214,240,.85),0 4px 0 rgba(10,29,36,.35)}93%{text-shadow:-6px 1px 0 rgba(255,111,156,.85),5px -1px 0 rgba(79,214,240,.85),0 4px 0 rgba(10,29,36,.35)}95%{text-shadow:2px 0 0 rgba(255,111,156,.85),-2px 0 0 rgba(79,214,240,.85),0 4px 0 rgba(10,29,36,.35)}}
 .tagline{font-size:19px;letter-spacing:.3em;white-space:nowrap;color:#0d4a63;text-shadow:0 1px 0 rgba(255,255,255,.5)}
 .subline{font-size:17px;letter-spacing:.1em;color:#1d5a73;max-width:340px}
-.start-low{display:flex;flex-direction:column;gap:12px}
+.start-low{display:flex;flex-direction:column;gap:10px}
+@media (max-height:760px){.wordmark{font-size:clamp(38px,11vw,52px)}.subline{font-size:15px}.start-low .credit{font-size:13px}}
 .howto{background:rgba(4,19,26,.8);border:2px solid var(--line)}
 .howto summary{list-style:none;cursor:pointer;padding:8px 12px;font-size:16px;letter-spacing:.24em;color:var(--drift)}
 .howto summary::-webkit-details-marker{display:none}
@@ -284,7 +294,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
     </header>
     <div class="hud-btns">
       <button type="button" id="helpBtn" aria-label="How to play">?</button>
-      <button type="button" id="muteBtn" aria-label="Mute sound" aria-pressed="false"></button>
+      <div class="grp"><button type="button" id="fsBtn" aria-label="Full screen" hidden></button><a id="fsLink" href="#" target="_blank" rel="noopener" aria-label="Open full screen in a new tab" hidden></a><button type="button" id="muteBtn" aria-label="Mute sound" aria-pressed="false"></button></div>
     </div>
 
     <section class="card out" id="card" hidden aria-live="polite">
@@ -317,6 +327,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
           </div>
         </details>
         <button class="btn big" type="button" id="startBtn">▼ BEGIN DESCENT ▼</button>
+        <a class="fsbtn" id="fsStart" href="#" target="_blank" rel="noopener" hidden></a>
         <div class="start-meta"><span id="diveNo">Arc Clubs Training 2026</span><span>7 PROMPTS</span></div>
         <p class="credit">Deep End is a loving rip-off of <a href="https://krillion.io" target="_blank" rel="noopener">Krillion</a>. Go play the original at krillion.io ↗</p>
         <p class="ph">[PLACEHOLDER DATA] Rarity for the Arc Sport and campus spaces prompts is a best guess for now.</p>
@@ -353,7 +364,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
         <div class="sonar" aria-hidden="true"><span id="timeDigits">25</span></div>
         <div class="input-col">
           <label class="sr-only" for="answerInput">Your answer</label>
-          <input id="answerInput" type="text" maxlength="80" placeholder="type one answer…" spellcheck="false" enterkeyhint="go">
+          <input id="answerInput" type="text" maxlength="80" placeholder="your answer…" spellcheck="false" enterkeyhint="go">
           <div class="fuse"><i id="fuse"></i></div>
         </div>
         <button id="diveBtn" type="submit">DIVE</button>
@@ -377,8 +388,8 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
    ALL ANSWERS AND TIERS BELOW ARE [PLACEHOLDER DATA].
    ===================================================================== */
 const EVENT_LABEL = 'Arc Clubs Training 2026';  // shown on the start screen and in copied results
-const PREVIEW_MODE = true;        // true = shows the [PLACEHOLDER] notes. Set to false once you're happy with the answer lists.
-const SHARE_URL = '';             // [GITHUB URL] e.g. 'https://arcclubs.github.io/deep-end/'. Added to the bottom of copied results.
+const PREVIEW_MODE = false;       // true = shows the [PLACEHOLDER] notes. Set to false once you're happy with the answer lists.
+const SHARE_URL = 'https://arclubs.github.io/Arc-Clubs-Deep-End/';           // [GITHUB URL] e.g. 'https://arcclubs.github.io/deep-end/'. Added to the bottom of copied results.
 
 const ROLE_GENERIC = ['vice','president','pres','vp','vicepresident','vicepres','copresident','copres','vps','director','directors','head','officer','officers','of','and','the','co','chief','lead','leader','manager','coordinator','convenor','convener','executive','exec','rep','representative','portfolio','team','chair','chairperson','senior','junior','assistant','deputy','general','for','in','on','subcommittee','subcom','member','role','arc'];
 
@@ -1351,6 +1362,26 @@ function sydneyParts(date){
   const muteBtn = $('muteBtn');
   function paintMute(){ muteBtn.innerHTML = Sound.muted ? SPEAKER_OFF : SPEAKER_ON; muteBtn.setAttribute('aria-pressed', String(Sound.muted)); muteBtn.setAttribute('aria-label', Sound.muted ? 'Turn sound on' : 'Mute sound'); }
   paintMute();
+  /* ----- full screen: real full screen where allowed, otherwise open the game in its own tab ----- */
+  const EXPAND = sprite(['XXX...XXX','X.......X','X.......X','.........','.........','.........','X.......X','X.......X','XXX...XXX'], {X:'#e9f4ee'});
+  const SHRINK = sprite(['..X...X..','..X...X..','XXX...XXX','.........','.........','.........','XXX...XXX','..X...X..','..X...X..'], {X:'#e9f4ee'});
+  let embedded = false; try { embedded = window.self !== window.top; } catch(e){ embedded = true; }
+  const touch = matchMedia('(pointer: coarse)').matches;
+  const canFS = !!(document.fullscreenEnabled || document.webkitFullscreenEnabled);
+  const isFS = () => !!(document.fullscreenElement || document.webkitFullscreenElement);
+  function enterFS(){ const el = document.documentElement, req = el.requestFullscreen || el.webkitRequestFullscreen; if (!canFS || !req) return; try { const r = req.call(el); if (r && r.catch) r.catch(() => {}); } catch(e) {} }
+  function exitFS(){ const ex = document.exitFullscreen || document.webkitExitFullscreen; try { const r = ex && ex.call(document); if (r && r.catch) r.catch(() => {}); } catch(e) {} }
+  const fsBtn = $('fsBtn'), fsLink = $('fsLink'), fsStart = $('fsStart');
+  function paintFS(){ fsBtn.innerHTML = isFS() ? SHRINK : EXPAND; fsBtn.setAttribute('aria-label', isFS() ? 'Exit full screen' : 'Full screen'); }
+  if (canFS){
+    fsBtn.hidden = false; paintFS();
+    fsBtn.addEventListener('click', () => { isFS() ? exitFS() : enterFS(); });
+    document.addEventListener('fullscreenchange', paintFS); document.addEventListener('webkitfullscreenchange', paintFS);
+    if (embedded){ fsStart.hidden = false; fsStart.removeAttribute('href'); fsStart.setAttribute('role','button'); fsStart.innerHTML = EXPAND + 'PLAY FULL SCREEN'; fsStart.addEventListener('click', e => { e.preventDefault(); enterFS(); }); }
+  } else if (embedded && SHARE_URL){
+    fsLink.hidden = false; fsLink.href = SHARE_URL; fsLink.innerHTML = EXPAND;
+    fsStart.hidden = false; fsStart.href = SHARE_URL; fsStart.innerHTML = EXPAND + 'OPEN FULL SCREEN';
+  }
   muteBtn.addEventListener('click', () => { Sound.init(); Sound.setMuted(!Sound.muted); paintMute(); try { localStorage.setItem('deepend:muted', Sound.muted ? '1' : '0'); } catch(e) {} });
 
   /* ================= camera, depth and background ================= */
@@ -1534,7 +1565,8 @@ function sydneyParts(date){
   function play(){
     phase = 'play'; lastSec = 99;
     show(els.countdown, false); show(els.playRow, true);
-    els.input.value = ''; els.input.disabled = false; els.input.focus();
+    els.input.value = ''; els.input.disabled = false;
+    if (!(touch && embedded && !isFS())) els.input.focus({preventScroll: true});
     endAt = performance.now() + ROUND_MS;
     requestAnimationFrame(timerLoop);
   }
@@ -1678,6 +1710,7 @@ function sydneyParts(date){
   /* ================= wiring ================= */
   $('startBtn').addEventListener('click', () => {
     if (results.length === SET.length){ show(els.start, false); show(els.log, true); scene.classList.remove('at-start'); return; }
+    if (embedded && touch && !isFS()) enterFS();
     startDive();
   });
   $('nextBtn').addEventListener('click', next);
