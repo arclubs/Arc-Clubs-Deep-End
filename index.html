@@ -1,0 +1,1726 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Deep End: seven prompts about UNSW Clubs. Rarer answers sink deeper.">
+<meta property="og:title" content="Deep End · an Arc Clubs dive">
+<meta property="og:description" content="Seven prompts about UNSW Clubs. Rarer answers sink deeper.">
+<title>Deep End</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 10' shape-rendering='crispEdges'%3E%3Cpath fill='%237ac143' d='M6 0h5v1h2v1h1v1h2v1h-1v1h1v1h-1v1h-1v1h-1v1h-2v1H6V9H4V8H2V7H1V6H0V4h1V3h1V2h2V1h2z'/%3E%3Cpath fill='%23e9f4ee' d='M5 2h2v1H5z'/%3E%3Cpath fill='%2304131a' d='M5 3h1v1H5z'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=VT323&display=swap">
+<style>
+/* Layout: one portrait water column. Sky and boat at the top, the diver holds a fixed screen height while the world scrolls up past it.
+   HUD pods across the top, prompt card under them, sonar dock at the bottom. Single dark look by design (it is the ocean). */
+:root{
+  --abyss:#04131a;
+  --panel:#0b2630;
+  --panel-hi:#10313d;
+  --line:#1f4652;
+  --foam:#e9f4ee;
+  --drift:#86a6aa;
+  --arc:#7ac143;
+  --arc-deep:#2d5a17;
+  --sky:#4fb3e8;
+  --blush:#ff6f9c;
+  --sun:#ffd100;
+  --ember:#f49121;
+  --violet:#a98bff;
+  --danger:#ff8a5c;
+  --t-fresher:#9fb6c9;
+  --t-clever:#f49121;
+  --t-subcom:#4fd6f0;
+  --t-director:#7ac143;
+  --t-exec:#a98bff;
+  --t-one:#ffd100;
+  --t-miss:#5d7680;
+  --font-pixel:'Silkscreen','VT323',ui-monospace,Menlo,monospace;
+  --font-mono:'VT323',ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace;
+  --gut-l:max(14px, env(safe-area-inset-left, 0px));
+  --gut-r:max(14px, env(safe-area-inset-right, 0px));
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{margin:0;background:var(--abyss);color:var(--foam);font-family:var(--font-mono);font-size:20px;line-height:1.15;overflow:hidden}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid var(--sun);outline-offset:2px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
+
+#app{height:100%;max-width:520px;margin:0 auto;display:flex;flex-direction:column;position:relative;background:var(--abyss);box-shadow:0 0 0 1px var(--line)}
+
+/* ---------- scene ---------- */
+.scene{flex:1;min-height:0;position:relative;overflow:hidden;background:#166082}
+#bg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1}
+.column{position:absolute;left:0;right:0;top:0;height:0;will-change:transform;z-index:2}
+.sky{position:absolute;left:0;right:0;bottom:0;height:1600px;background:linear-gradient(to bottom,#2f86c4 0%,#62b4e3 55%,#a9dcf2 88%,#d6f0f8 100%);overflow:hidden}
+.sun{position:absolute;right:16%;bottom:170px;width:56px;height:56px;background:#ffe27a;box-shadow:0 0 0 6px rgba(255,226,122,.35),0 0 60px 26px rgba(255,214,90,.45);border-radius:50%}
+.cloud{position:absolute;image-rendering:pixelated;animation:drift linear infinite}
+.cloud svg{display:block;width:100%;height:auto}
+@keyframes drift{from{transform:translateX(-40px)}to{transform:translateX(40px)}}
+.boat{position:absolute;left:28%;top:-21px;width:58px;z-index:3;animation:rock 3.2s ease-in-out infinite;transform-origin:50% 100%}
+.boat svg{display:block;width:100%;height:auto}
+@keyframes rock{0%,100%{transform:rotate(-3deg) translateY(0)}50%{transform:rotate(3deg) translateY(2px)}}
+.surface{position:absolute;left:0;right:0;top:-3px;height:8px;background:repeating-linear-gradient(90deg,rgba(233,244,238,.85) 0 10px,rgba(233,244,238,.35) 10px 20px);animation:waves 2.4s linear infinite}
+@keyframes waves{to{background-position:20px 0}}
+.ruler{position:absolute;right:calc(var(--gut-r) + 2px);width:46px;height:0}
+.ruler i{position:absolute;right:0;width:6px;border-top:2px solid rgba(233,244,238,.32)}
+.ruler i.big{width:12px;border-top-color:rgba(233,244,238,.5)}
+.ruler span{position:absolute;right:16px;transform:translateY(-55%);font-size:14px;color:rgba(233,244,238,.55);font-variant-numeric:tabular-nums;white-space:nowrap}
+.fact{position:absolute;left:var(--gut-l);right:66px;font-size:15px;letter-spacing:.08em;color:rgba(233,244,238,.42);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transform:translateY(-50%)}
+.fact.r{text-align:right}
+.zone{position:absolute;left:0;right:0;height:0;border-top:2px solid rgba(233,244,238,.12)}
+.zone b{position:absolute;left:var(--gut-l);top:6px;font-family:var(--font-pixel);font-weight:400;font-size:13px;letter-spacing:.2em;color:rgba(233,244,238,.35)}
+.tline{position:absolute;left:var(--gut-l);right:60px;height:0;border-top:2px dashed rgba(233,244,238,.22);transition:border-color .35s,box-shadow .35s,opacity .5s}
+.tline .tag{position:absolute;right:0;top:-21px;font-size:15px;letter-spacing:.16em;color:rgba(233,244,238,.5);transition:color .3s,text-shadow .3s;white-space:nowrap;display:flex;align-items:center;gap:6px}
+.tline .tag svg{width:14px;height:14px;opacity:.6}
+.tline.passed{border-top-color:var(--tc);box-shadow:0 0 12px var(--tc)}
+.tline.passed .tag{color:var(--tc);text-shadow:0 0 8px var(--tc)}
+.tline.passed .tag svg{opacity:1}
+.tline.hit{border-top-style:solid;animation:hitline .8s ease-out}
+.tline.gone{opacity:0}
+@keyframes hitline{0%{box-shadow:0 0 30px 6px var(--tc)}100%{box-shadow:0 0 12px var(--tc)}}
+
+.diver{position:absolute;left:44%;width:62px;transform:translate(-50%,-50%);z-index:4;pointer-events:none;transition:left .9s cubic-bezier(.22,1,.36,1)}
+.diver svg{display:block;width:100%;height:auto;animation:bob 2.6s ease-in-out infinite;filter:drop-shadow(0 0 10px rgba(122,193,67,.45))}
+.diver.sinking svg{animation:wiggle .35s ease-in-out infinite}
+.diver.sad svg{animation:sad .5s ease-in-out}
+@keyframes bob{0%,100%{transform:translateY(-4px) rotate(-3deg)}50%{transform:translateY(4px) rotate(3deg)}}
+@keyframes wiggle{0%,100%{transform:rotate(-12deg)}50%{transform:rotate(-2deg) translateY(2px)}}
+@keyframes sad{20%,60%{transform:translateX(-5px)}40%,80%{transform:translateX(5px)}}
+.bubble{position:absolute;left:12%;top:20%;width:6px;height:6px;border:2px solid rgba(233,244,238,.65);animation:rise 2.6s linear infinite;opacity:0}
+.bubble:nth-child(3){left:2%;width:4px;height:4px;animation-delay:.9s}
+.bubble:nth-child(4){left:18%;animation-delay:1.7s}
+.diver.sinking .bubble{animation-duration:.9s}
+@keyframes rise{0%{transform:translateY(0);opacity:0}15%{opacity:.85}100%{transform:translateY(-80px);opacity:0}}
+.blub{position:absolute;left:70%;top:-26px;font-size:16px;color:var(--foam);background:rgba(4,19,26,.75);border:2px solid var(--line);padding:0 6px;white-space:nowrap;opacity:0;transition:opacity .2s}
+.blub.on{opacity:1}
+
+.banner{position:absolute;left:50%;z-index:5;transform:translate(-50%,0);pointer-events:none;font-family:var(--font-pixel);font-weight:700;font-size:clamp(15px,4.4vw,19px);letter-spacing:.06em;color:var(--tc);background:rgba(4,19,26,.82);border:2px solid var(--tc);box-shadow:0 0 18px -2px var(--tc),inset 0 0 12px -4px var(--tc);padding:8px 14px;white-space:normal;text-align:center;width:max-content;max-width:calc(100% - 90px);text-shadow:0 0 10px var(--tc)}
+.banner.in{animation:bannerin .35s cubic-bezier(.34,1.56,.64,1)}
+@keyframes bannerin{from{transform:translate(-50%,-14px) scale(.8);opacity:0}}
+.you{position:absolute;right:calc(var(--gut-r) - 4px);z-index:5;transform:translateY(-50%);font-size:14px;letter-spacing:.14em;color:var(--blush);display:flex;align-items:center;gap:4px;text-shadow:0 0 8px var(--blush);pointer-events:none}
+.you::after{content:"";width:0;height:0;border-top:6px solid transparent;border-bottom:6px solid transparent;border-right:9px solid var(--blush)}
+
+.vignette{position:absolute;inset:0;z-index:6;pointer-events:none;background:radial-gradient(ellipse at 50% 45%,transparent 55%,rgba(0,0,0,.55) 100%)}
+.crt{position:absolute;inset:0;z-index:7;pointer-events:none;background:repeating-linear-gradient(to bottom,rgba(255,255,255,.035) 0 1px,transparent 1px 3px);mix-blend-mode:overlay}
+.flash{position:absolute;inset:0;z-index:8;pointer-events:none;background:var(--tc,#fff);opacity:0}
+.flash.go{animation:flash .5s ease-out}
+@keyframes flash{0%{opacity:.28}100%{opacity:0}}
+.scene.shake{animation:shake .45s}
+@keyframes shake{20%{transform:translate(-3px,2px)}40%{transform:translate(3px,-2px)}60%{transform:translate(-2px,-1px)}80%{transform:translate(2px,1px)}}
+
+/* ---------- HUD ---------- */
+.hud{position:absolute;top:10px;left:var(--gut-l);right:var(--gut-r);z-index:9;display:grid;grid-template-columns:auto 1fr auto;align-items:start;gap:10px;pointer-events:none;transition:opacity .4s}
+.pod{min-width:78px;background:rgba(4,19,26,.78);border:2px solid var(--line);box-shadow:3px 3px 0 rgba(0,0,0,.35);padding:4px 10px 5px;clip-path:polygon(6px 0,calc(100% - 6px) 0,100% 6px,100% calc(100% - 6px),calc(100% - 6px) 100%,6px 100%,0 calc(100% - 6px),0 6px)}
+.pod.r{text-align:right}
+.pod .label{font-size:12px;letter-spacing:.28em;color:var(--drift)}
+.pod .num{font-size:26px;line-height:1;font-variant-numeric:tabular-nums;white-space:nowrap}
+#depthNum{color:var(--sky);text-shadow:0 0 12px rgba(79,179,232,.6)}
+#scoreNum{color:var(--blush);text-shadow:0 0 12px rgba(255,111,156,.55)}
+.crank{animation:crank .14s cubic-bezier(.34,1.56,.64,1)}
+@keyframes crank{50%{transform:translateY(2px) scale(1.08)}}
+.mid{display:flex;flex-direction:column;align-items:center;gap:3px;padding-top:4px}
+.dots{display:flex;gap:4px}
+.dots i{width:13px;height:13px;border:2px solid var(--line);background:rgba(4,19,26,.7);transition:background .3s,box-shadow .3s}
+.dots i.now{border-color:var(--blush);background:var(--blush);box-shadow:0 0 8px var(--blush)}
+.dots i.done{background:var(--tc);border-color:var(--tc)}
+.mid .count{font-size:12px;letter-spacing:.24em;color:var(--drift)}
+.hud-btns{position:absolute;top:70px;left:var(--gut-l);right:var(--gut-r);z-index:9;display:flex;justify-content:space-between;pointer-events:none}
+.hud-btns button{pointer-events:auto;width:34px;height:30px;display:grid;place-items:center;background:rgba(4,19,26,.78);border:2px solid var(--line);color:var(--foam);font-family:var(--font-pixel);font-size:14px}
+.hud-btns button:hover{border-color:var(--arc)}
+.hud-btns button svg{width:18px;height:18px}
+.scene.at-start .hud{opacity:0}
+
+/* ---------- prompt card ---------- */
+.card{position:absolute;top:108px;left:var(--gut-l);right:calc(var(--gut-r) + 50px);z-index:9;background:rgba(9,32,41,.9);border:2px solid var(--line);box-shadow:4px 4px 0 rgba(0,0,0,.35);padding:12px 14px 10px;backdrop-filter:blur(2px);transition:transform .45s cubic-bezier(.22,1,.36,1),opacity .35s}
+.card.out{transform:translateX(-112%);opacity:0}
+.card .rnd{font-size:15px;letter-spacing:.3em;color:var(--blush)}
+.card .prompt{font-size:clamp(25px,6.6vw,32px);line-height:1.02;margin:6px 0 7px;text-wrap:balance;min-height:1em}
+.card .prompt .caret{display:inline-block;width:.45em;height:.9em;background:var(--foam);vertical-align:-.1em;animation:blink .7s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.card .hint{font-size:15px;letter-spacing:.1em;color:var(--drift)}
+
+/* ---------- landing panel ---------- */
+.land{position:absolute;left:var(--gut-l);right:calc(var(--gut-r) + 50px);bottom:18px;z-index:9;text-align:center;display:flex;flex-direction:column;align-items:center;gap:4px}
+.land .ico{width:44px;height:44px;filter:drop-shadow(0 0 10px var(--tc))}
+.land .ico svg{width:100%;height:100%;display:block}
+.land .tname{font-family:var(--font-pixel);font-weight:700;font-size:clamp(24px,7vw,32px);letter-spacing:.06em;color:var(--tc);text-shadow:0 0 14px var(--tc),3px 3px 0 rgba(0,0,0,.5)}
+.land .tans{font-size:24px;letter-spacing:.03em;max-width:100%;overflow-wrap:anywhere}
+.land .tpts{font-size:19px;color:var(--foam);letter-spacing:.06em}
+.land .tpts b{color:var(--tc);font-weight:400}
+.land .quip{font-size:16px;color:var(--drift);letter-spacing:.06em;margin-bottom:8px}
+.land.in>*{animation:rise-in .5s cubic-bezier(.22,1,.36,1) both}
+.land.in>*:nth-child(2){animation-delay:.06s}.land.in>*:nth-child(3){animation-delay:.12s}.land.in>*:nth-child(4){animation-delay:.18s}.land.in>*:nth-child(5){animation-delay:.24s}.land.in>*:nth-child(6){animation-delay:.36s}
+@keyframes rise-in{from{transform:translateY(16px);opacity:0}}
+.btn{font-family:var(--font-pixel);font-weight:700;letter-spacing:.12em;font-size:17px;color:var(--foam);background:rgba(9,32,41,.92);border:3px solid var(--sky);box-shadow:0 0 0 2px rgba(4,19,26,.9),0 0 18px -4px var(--sky);padding:12px 26px;transition:transform .1s,box-shadow .2s}
+.btn:hover{box-shadow:0 0 0 2px rgba(4,19,26,.9),0 0 26px -2px var(--sky)}
+.btn:active{transform:translateY(2px)}
+.btn.big{width:100%;font-size:19px;padding:16px 10px}
+
+/* ---------- start screen ---------- */
+.start{position:absolute;inset:0;z-index:10;display:flex;flex-direction:column;justify-content:space-between;padding-block:max(28px,6vh) 18px;padding-left:var(--gut-l);padding-right:var(--gut-r);pointer-events:none}
+.start>*{pointer-events:auto}
+.title-block{text-align:center;display:flex;flex-direction:column;align-items:center;gap:10px}
+.wordmark{margin:0;font-family:var(--font-pixel);font-weight:700;font-size:clamp(44px,13.5vw,64px);line-height:.95;letter-spacing:.04em;color:#f3fff0;text-shadow:-3px 0 0 rgba(255,111,156,.85),3px 0 0 rgba(79,214,240,.85),0 4px 0 rgba(10,29,36,.35);animation:glitch 6s steps(1) infinite}
+@keyframes glitch{0%,92%,100%{text-shadow:-3px 0 0 rgba(255,111,156,.85),3px 0 0 rgba(79,214,240,.85),0 4px 0 rgba(10,29,36,.35)}93%{text-shadow:-6px 1px 0 rgba(255,111,156,.85),5px -1px 0 rgba(79,214,240,.85),0 4px 0 rgba(10,29,36,.35)}95%{text-shadow:2px 0 0 rgba(255,111,156,.85),-2px 0 0 rgba(79,214,240,.85),0 4px 0 rgba(10,29,36,.35)}}
+.tagline{font-size:19px;letter-spacing:.3em;white-space:nowrap;color:#0d4a63;text-shadow:0 1px 0 rgba(255,255,255,.5)}
+.subline{font-size:17px;letter-spacing:.1em;color:#1d5a73;max-width:340px}
+.start-low{display:flex;flex-direction:column;gap:12px}
+.howto{background:rgba(4,19,26,.8);border:2px solid var(--line)}
+.howto summary{list-style:none;cursor:pointer;padding:8px 12px;font-size:16px;letter-spacing:.24em;color:var(--drift)}
+.howto summary::-webkit-details-marker{display:none}
+.howto summary::before{content:"▸ "}
+.howto[open] summary::before{content:"▾ "}
+.howto-body{padding:0 12px 10px;max-height:38vh;overflow-y:auto}
+.howto-body p{margin:0 0 8px;font-size:18px;line-height:1.2}
+.ladder{list-style:none;margin:0;padding:0}
+.ladder li{display:grid;grid-template-columns:22px 1fr auto;gap:10px;align-items:center;padding:4px 0;border-top:1px solid rgba(31,70,82,.7)}
+.ladder svg{width:20px;height:20px;display:block}
+.ladder .nm{font-size:19px;color:var(--tc)}
+.ladder .ds{font-size:15px;color:var(--drift);display:block}
+.ladder .pt{font-size:17px;text-align:right;font-variant-numeric:tabular-nums}
+.ladder .pt small{display:block;font-size:13px;color:var(--drift)}
+.start-meta{display:flex;justify-content:space-between;gap:10px;font-size:15px;letter-spacing:.1em;color:var(--drift);white-space:nowrap}
+.credit{margin:0;font-size:15px;letter-spacing:.04em;color:var(--drift);text-align:center;background:rgba(4,19,26,.7);padding:4px 8px}
+.credit a{color:var(--sky)}
+.ph{font-size:14px;color:var(--sun);border:1px dashed rgba(255,209,0,.45);padding:6px 9px;margin:0;line-height:1.2;background:rgba(4,19,26,.7)}
+
+/* ---------- dive log ---------- */
+.log{position:absolute;inset:0;z-index:10;overflow-y:auto;background:rgba(4,19,26,.92);padding-block:22px 28px;padding-left:var(--gut-l);padding-right:var(--gut-r)}
+.log-inner{max-width:440px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+.log-head{text-align:center}
+.log-head h2{font-family:var(--font-pixel);font-weight:700;font-size:28px;letter-spacing:.08em;margin:0}
+.log-head p{margin:2px 0 0;font-size:16px;letter-spacing:.24em;color:var(--drift)}
+.summary{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat{border:2px solid var(--line);background:rgba(11,38,48,.7);padding:10px 12px;text-align:center}
+.stat .label{font-size:13px;letter-spacing:.24em;color:var(--drift)}
+.stat .big{font-size:36px;line-height:1;font-variant-numeric:tabular-nums}
+.stat .small{font-size:17px;color:var(--drift)}
+.stat.wide{grid-column:1 / -1}
+#bandName{font-family:var(--font-pixel);font-weight:700;font-size:22px;letter-spacing:.06em;color:var(--tc);text-shadow:0 0 12px var(--tc)}
+.chart{border:2px solid var(--line);background:rgba(11,38,48,.7);padding:8px}
+.chart svg{display:block;width:100%;height:auto}
+.chart .ax{fill:var(--drift);font-family:var(--font-mono);font-size:13px}
+.chart .grid{stroke:rgba(134,166,170,.18);stroke-width:1}
+.rounds{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.rounds li{border-left:4px solid var(--tc);background:rgba(11,38,48,.6);padding:6px 10px;display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:baseline}
+.rounds .q{grid-column:1 / -1;font-size:15px;color:var(--drift);letter-spacing:.04em}
+.rounds .a{font-size:21px;min-width:0;overflow-wrap:anywhere}
+.rounds .a small{font-size:15px;color:var(--tc);letter-spacing:.08em;margin-left:6px}
+.rounds .p{font-size:18px;color:var(--tc);font-variant-numeric:tabular-nums}
+.share{display:flex;flex-direction:column;gap:8px}
+.share pre{margin:0;white-space:pre-wrap;font-family:var(--font-mono);font-size:19px;line-height:1.2;background:var(--abyss);border:2px dashed var(--line);padding:10px 12px;user-select:all}
+.share .row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+#copyStatus{font-size:16px;color:var(--arc);min-height:18px;text-align:center}
+.deepest h3{font-size:16px;letter-spacing:.24em;color:var(--drift);font-weight:400;margin:0 0 6px}
+.deepest ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px}
+.deepest li{font-size:18px;display:flex;justify-content:space-between;gap:12px;border-bottom:1px dashed rgba(31,70,82,.9);padding-bottom:3px}
+.deepest li span:first-child{color:var(--drift);min-width:0}
+.deepest li span:last-child{color:var(--t-one);text-align:right}
+.next{text-align:center;font-size:18px;color:var(--drift);letter-spacing:.06em}
+.next b{color:var(--foam);font-weight:400;font-variant-numeric:tabular-nums}
+.ghost{background:transparent;border:2px solid var(--line);padding:8px 14px;font-size:18px;letter-spacing:.08em;color:var(--foam)}
+.ghost:hover{border-color:var(--arc)}
+
+/* ---------- dock ---------- */
+.dock{position:relative;z-index:11;background:linear-gradient(to bottom,#071a22,var(--abyss));border-top:2px solid var(--line);padding-block:10px 12px;padding-left:var(--gut-l);padding-right:var(--gut-r);min-height:84px;display:flex;flex-direction:column;justify-content:center;gap:6px}
+.countdown{text-align:center;font-size:18px;letter-spacing:.14em;color:var(--drift);background:rgba(11,38,48,.7);border:2px solid var(--line);padding:10px}
+.countdown b{color:var(--sky);font-weight:400}
+.dock-row{display:flex;gap:10px;align-items:center}
+.sonar{width:56px;height:56px;flex:none;border-radius:50%;border:2px solid #1e5c6e;background:radial-gradient(circle,#0b3442 0%,#061c24 70%);position:relative;display:grid;place-items:center;box-shadow:0 0 14px -4px var(--sky) inset}
+.sonar::before{content:"";position:absolute;inset:3px;border-radius:50%;background:conic-gradient(from 0deg,rgba(79,214,240,.55),rgba(79,214,240,0) 25%,transparent);animation:sweep 1.6s linear infinite}
+.sonar::after{content:"";position:absolute;inset:14px;border-radius:50%;border:1px solid rgba(79,214,240,.25)}
+@keyframes sweep{to{transform:rotate(360deg)}}
+#timeDigits{position:relative;z-index:1;font-size:24px;color:var(--sky);text-shadow:0 0 10px rgba(79,214,240,.8);font-variant-numeric:tabular-nums}
+.dock.hot .sonar{border-color:var(--ember);box-shadow:0 0 16px -2px var(--ember) inset}
+.dock.hot .sonar::before{background:conic-gradient(from 0deg,rgba(244,145,33,.6),transparent 25%,transparent);animation-duration:.8s}
+.dock.hot #timeDigits{color:var(--ember);text-shadow:0 0 12px rgba(244,145,33,.9)}
+.input-col{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
+#answerInput{width:100%;font-family:var(--font-mono);font-size:24px;color:var(--foam);background:#061c24;border:2px solid #22606f;padding:7px 10px;outline:none;border-radius:0;box-shadow:0 0 12px -6px var(--sky) inset}
+#answerInput:focus{border-color:var(--sky)}
+#answerInput::placeholder{color:rgba(134,166,170,.6)}
+#answerInput.reject{animation:rshake .3s}
+@keyframes rshake{25%,75%{transform:translateX(-5px)}50%{transform:translateX(5px)}}
+.fuse{height:4px;background:rgba(31,70,82,.6)}
+.fuse i{display:block;height:100%;width:100%;background:var(--sky);box-shadow:0 0 8px var(--sky);transform-origin:left;transition:background .3s}
+.dock.hot .fuse i{background:var(--ember);box-shadow:0 0 8px var(--ember)}
+#diveBtn{flex:none;font-family:var(--font-pixel);font-weight:700;font-size:16px;letter-spacing:.12em;background:#c43b6a;color:#fff;border:0;padding:0 16px;height:52px;box-shadow:inset 0 -4px 0 rgba(0,0,0,.25),0 0 14px -4px var(--blush)}
+#diveBtn:hover{background:#d94a7b}
+#diveBtn:active{transform:translateY(2px)}
+#msg{font-size:16px;min-height:18px;letter-spacing:.04em;color:var(--drift);text-align:center}
+#msg.bad{color:var(--danger)}
+#msg.fix{color:var(--sun)}
+
+@media (prefers-reduced-motion: reduce){
+  .diver svg,.bubble,.cloud,.boat,.surface,.wordmark,.sonar::before{animation:none!important}
+  .land.in>*,.banner.in,.flash.go,.scene.shake,.crank,#answerInput.reject{animation:none!important}
+  .card{transition:none}
+}
+@media (max-height:640px){
+  .card{top:100px}
+  .hud-btns{top:64px}
+}
+</style>
+</head>
+<body>
+
+<div id="app">
+  <main class="scene at-start" id="scene">
+    <canvas id="bg" aria-hidden="true"></canvas>
+    <div class="column" id="column" aria-hidden="true"></div>
+    <div class="diver" id="diver" aria-hidden="true"><span class="bubble"></span><span class="bubble"></span><span class="bubble"></span><span class="blub" id="blub">blub?</span></div>
+    <div class="banner" id="banner" hidden></div>
+    <div class="you" id="you" hidden>YOU</div>
+    <div class="vignette"></div><div class="crt"></div><div class="flash" id="flash"></div>
+
+    <header class="hud" aria-label="Your dive">
+      <div class="pod"><div class="label">DEPTH</div><div class="num"><span id="depthNum">0</span>m</div></div>
+      <div class="mid"><div class="dots" id="dots"></div><div class="count" id="count">PROMPT 1 OF 7</div></div>
+      <div class="pod r"><div class="label">SCORE</div><div class="num" id="scoreNum">0</div></div>
+    </header>
+    <div class="hud-btns">
+      <button type="button" id="helpBtn" aria-label="How to play">?</button>
+      <button type="button" id="muteBtn" aria-label="Mute sound" aria-pressed="false"></button>
+    </div>
+
+    <section class="card out" id="card" hidden aria-live="polite">
+      <div class="rnd" id="rnd">PROMPT 1 OF 7</div>
+      <div class="prompt" id="promptText"></div>
+      <div class="hint" id="hintText">▼ rarer answers sink deeper ▼</div>
+    </section>
+
+    <section class="land" id="land" hidden aria-live="assertive">
+      <div class="ico" id="landIco"></div>
+      <div class="tname" id="landName"></div>
+      <div class="tans" id="landAns"></div>
+      <div class="tpts" id="landPts"></div>
+      <div class="quip" id="landQuip"></div>
+      <button class="btn" type="button" id="nextBtn">DESCEND ▼</button>
+    </section>
+
+    <section class="start" id="startScreen" aria-labelledby="startTitle">
+      <div class="title-block">
+        <h1 class="wordmark" id="startTitle">DEEP END</h1>
+        <div class="tagline">THE CLUB DIVE</div>
+        <div class="subline">7 prompts · 25 seconds each · rarer answers sink deeper</div>
+      </div>
+      <div class="start-low">
+        <details class="howto" id="howto">
+          <summary>HOW TO PLAY</summary>
+          <div class="howto-body">
+            <p>Every Club leader gets the same seven prompts about UNSW Clubs. Type one answer per prompt before the sonar runs out. The fewer people who'd think of your answer, the deeper you sink.</p>
+            <ul class="ladder" id="ladder"></ul>
+          </div>
+        </details>
+        <button class="btn big" type="button" id="startBtn">▼ BEGIN DESCENT ▼</button>
+        <div class="start-meta"><span id="diveNo">Arc Clubs Training 2026</span><span>7 PROMPTS</span></div>
+        <p class="credit">Deep End is a loving rip-off of <a href="https://krillion.io" target="_blank" rel="noopener">Krillion</a>. Go play the original at krillion.io ↗</p>
+        <p class="ph">[PLACEHOLDER DATA] Rarity for the Arc Sport and campus spaces prompts is a best guess for now.</p>
+      </div>
+    </section>
+
+    <section class="log" id="logScreen" hidden aria-labelledby="logTitle">
+      <div class="log-inner">
+        <div class="log-head"><h2 id="logTitle">DIVE LOG</h2><p>DEEPER = RARER</p></div>
+        <div class="summary">
+          <div class="stat"><div class="label">DEPTH</div><div class="big" id="sumDepth" style="color:var(--sky)">0m</div></div>
+          <div class="stat"><div class="label">SCORE</div><div class="big" id="sumScore" style="color:var(--blush)">0</div><div class="small">of 700 pts</div></div>
+          <div class="stat wide"><div class="label">YOU REACHED</div><div id="bandName">SUNLIGHT ZONE</div><div class="small" id="bandDesc"></div></div>
+        </div>
+        <div class="chart" id="chart"></div>
+        <ul class="rounds" id="roundList"></ul>
+        <div class="share">
+          <pre id="shareText"></pre>
+          <div class="row"><button class="btn" id="copyBtn" type="button">COPY RESULT</button></div>
+          <div id="copyStatus" aria-live="polite"></div>
+        </div>
+        <div class="deepest"><h3>THE HIDDEN GEMS</h3><ul id="deepestList"></ul></div>
+                <div class="share"><div class="row"><button class="ghost" id="replayBtn" type="button">Dive again</button></div></div>
+        <p class="ph">[PLACEHOLDER DATA] Rarity for the Arc Sport and campus spaces prompts is a best guess for now.</p>
+        <p class="credit">Deep End is a loving rip-off of <a href="https://krillion.io" target="_blank" rel="noopener">Krillion</a>. Go play the original at krillion.io ↗</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="dock" id="dock" hidden>
+    <div class="countdown" id="countdown">descending · the clock starts in <b>3</b></div>
+    <div id="playRow" hidden>
+      <form class="dock-row" id="answerForm" autocomplete="off">
+        <div class="sonar" aria-hidden="true"><span id="timeDigits">25</span></div>
+        <div class="input-col">
+          <label class="sr-only" for="answerInput">Your answer</label>
+          <input id="answerInput" type="text" maxlength="80" placeholder="type one answer…" spellcheck="false" enterkeyhint="go">
+          <div class="fuse"><i id="fuse"></i></div>
+        </div>
+        <button id="diveBtn" type="submit">DIVE</button>
+      </form>
+    </div>
+    <div id="msg" aria-live="polite"></div>
+  </footer>
+</div>
+
+<script>
+/* =====================================================================
+   DEEP END: EDIT ME
+   One set = 7 prompts. Each answer line is:
+     Answer name | tier | alias, alias, alias
+   Tiers (shallow to deep): fresher, clever, subcom, director, exec, one
+   strip   = filler words ignored everywhere ("Chess Club" = "Chess Society" = "chess")
+   generic = words that only describe the KIND of thing (e.g. "Vice President of", "Director").
+             When the player types extra words, these are peeled away to find the core
+             ("VP of Careers" -> Careers). Only used when `loose: true`.
+   loose   = also accept an answer when any single meaningful word in the guess matches.
+   ALL ANSWERS AND TIERS BELOW ARE [PLACEHOLDER DATA].
+   ===================================================================== */
+const EVENT_LABEL = 'Arc Clubs Training 2026';  // shown on the start screen and in copied results
+const PREVIEW_MODE = true;        // true = shows the [PLACEHOLDER] notes. Set to false once you're happy with the answer lists.
+const SHARE_URL = '';             // [GITHUB URL] e.g. 'https://arcclubs.github.io/deep-end/'. Added to the bottom of copied results.
+
+const ROLE_GENERIC = ['vice','president','pres','vp','vicepresident','vicepres','copresident','copres','vps','director','directors','head','officer','officers','of','and','the','co','chief','lead','leader','manager','coordinator','convenor','convener','executive','exec','rep','representative','portfolio','team','chair','chairperson','senior','junior','assistant','deputy','general','for','in','on','subcommittee','subcom','member','role','arc'];
+
+const DAILY_SETS = [[
+{
+  prompt: 'Name a UNSW Club',
+  hint: '▼ every Club counts · smaller Clubs sink deeper ▼',
+  strip: ['the','unsw','society','soc','club','of','association','students','student'],
+  answers: `
+Arc Clubs Team | clever | arc, arc clubs, clubsclub, the arc clubs team
+UNSW Bouldering Society | fresher | BoulderSoc, Boulder, bouldering, boulder
+Business Society | fresher | BSOC
+Faculty of Engineering Student Society | fresher | ENGSOC, ENG, engineering society, engsoc
+Law Society | fresher | 
+Financial Management Association of Australia | fresher | FMAA
+Arts, Design & Architecture Society | fresher | ADASoc, ADA
+Poker Society UNSW | fresher | PokerSoc, Poker
+CSE Society | fresher | CSESOC, CSE, cse, csesoc
+Actuarial Society | fresher | ASOC
+Robotics and Mechatronics Society | fresher | RAMSoc, RAM
+University Network for Investing & Trading | fresher | UNIT
+BITSA UNSW | fresher | BITSA
+Accounting and Taxation Society | fresher | AccSoc, Acc
+Women in Technology | fresher | WIT, wit
+Chinese Student Association | fresher | CSA
+UNSW Science Society | fresher | SCISOC, SCI
+Software Development Society (Dev Soc) | fresher | DevSoc, Dev, Dev Soc, software development, devsoc
+Electrical Engineering & Telecommunications Society | fresher | ELSOC
+Women in Engineering | fresher | WIESoc, WIE, wie
+Beverage Society | fresher | BevSoc, Bev
+Finance and Banking Society | fresher | FINSOC, FIN
+Music Society of UNSW | fresher | MUSOC
+Australia China Youth Association | fresher | ACYA
+BusinessONE UNSW | fresher | B1
+Economics Society | fresher | ECOSOC, ECO
+The School of Mechanical and Manufacturing Engineering Student Society | fresher | MECHSOC, MECH
+United Nations Society | fresher | UN Society
+Minecraft Society | fresher | MinecraftSoc, Minecraft
+UNSW Management Society | fresher | MSOC
+Tabletop Games Society | fresher | TTG Soc, TTG
+UNSW Hindu Society | fresher | HinduSoc, Hindu
+Marketing Society | fresher | MarkSoc, Mark
+UNSW Cat Appreciation Society | fresher | CatSoc, Cat, cat, cat society
+Data Science Society | fresher | DataSoc, Data
+UNSW Muslim Students' Association | fresher | MSA
+Adventure Society | fresher | ADSOC
+Advertising & Public Relations Society | fresher | APRS
+Investing for Charity | fresher | I4C
+UNSW Indian Society | subcom | INDSoc, IND
+Competitive Programming and Mathematics Society | subcom | CPMSoc, CPM
+Artificial Intelligence Society | subcom | AI Soc, AI
+UNSW Digital Society | subcom | DigiSoc, Digi
+Pokemon Society | subcom | Pokesoc, Poke, pokemon
+Wandering Society | subcom | Wandersoc, Wander
+Anime UNSW | subcom | AnimeUNSW, anime, anime society
+Craft Society | subcom | CraftSoc, Craft
+Vietnamese Students Association | subcom | VSA
+UNSW Psychology Society | subcom | PSYCHSOC, PSYCH
+Pickleball Society | subcom | PickleSoc, Pickle
+Alternative Investment Society | subcom | AIS
+UNSW Riot Games Society | subcom | RiotSoc, Riot
+Women In Science Society UNSW | subcom | WISSOC, WIS
+Design Society UNSW | subcom | DDESSOC, DDES
+UNSW Forex Association | subcom | UNSW FXA
+Barbell Club | subcom | 
+Drawing Society | subcom | DrawSoc, Draw
+180 Degrees Consulting | subcom | 180DC
+Allied Health Society UNSW | subcom | AHSOC
+Aerospace Society | subcom | 
+Commerce (International) Society | subcom | Com(Int)Soc, ComIntSoc, commerce international, commint
+Arab Society | subcom | ArabSoc, Arab
+Cocktail Society | subcom | CocktailSoc, Cocktail
+Save the Children Australia UNSW | subcom | SCA
+Real Estate Investment Student Association | subcom | REISA
+Rhythm Games Society | subcom | RGS
+Business Sustainability and Social Impact Society | subcom | BSASIS
+Australia-Japan Career Society | subcom | AJCSoc, AJC
+Quantitative Finance and Trading Society | subcom | QuantSoc, Quant
+Rural Allied Health and Medical Society | subcom | RAHMS
+Civil and Environmental Engineering Society | subcom | CEVSOC, CEV
+Biotechnology and Biomolecular Sciences Student Society | subcom | BABSOC, BAB
+UNSW Motorsport Society | subcom | MotorSoc, Motor
+UNSW Chess Club | subcom | Chess Club
+Birds Observation Club | subcom | BOC UNSW, birds, bird, birdwatching
+Comp Club | subcom | CompClub
+UNSW Social Golf Society | subcom | GolfSoc, Golf
+CueSports Society | subcom | 
+Financial Technology Society | subcom | UNSW FinTech Society
+Latin Dance Society UNSW | subcom | Latin Dance Society
+Computer Science and Engineering Revue Society | subcom | CSE Revue
+Hoyoverse Society | subcom | HoyoSoc, Hoyo
+Dog Appreciation Society | subcom | DogSoc, Dog, dog, dog society
+Roblox Society | subcom | RoSoc
+Enactus UNSW | subcom | 
+Nintendo Society | subcom | NinSoc, Nin
+CREATE NSW Inc. | subcom | CREATE
+Bioinformatics Society | subcom | BINFSOC, BINF
+PCSoc: Computers and Tech | subcom | PCSoc
+Socratic Society | subcom | SocSoc, socratic
+Astronomy Society | subcom | AstroSoc, Astro
+Anjali Tamil Society | subcom | 
+UNSW Tea & Coffee Society | subcom | TACsoc, TAC, tea and coffee, coffee
+Engineering Project and Innovation Society | subcom | EPAIS
+Capital Markets Association | subcom | CMA
+Biomedical Engineering Students' Society | subcom | BESS
+UNSW Architecture Society | subcom | ArchSoc, Arch
+Security Society | subcom | SecSoc, Sec
+Asia Australia Youth Association UNSW | subcom | AAYA UNSW
+UNSW Chemical Engineering Undergraduate Society | subcom | CEUS
+Marketing Analytics Society | subcom | MASoc
+UNSW Ski and Board Society | subcom | NEWSKI
+UNSW Ice Skating Society | subcom | IceSoc, Ice
+Singapore Students' Association | subcom | SSA
+Media Society | subcom | MediaSoc, Media
+Women In Management | subcom | WIM
+Education Society | subcom | EduSoc, Edu
+Matcha Society | subcom | MatchaSoc, Matcha
+UNSW Kpop Society | subcom | UNSW KPOPSOC, UNSW KPOP, kpop, k-pop
+Politics, Philosophy, and Economics Society UNSW | subcom | PPESoc, PPE
+Boys and Girls Love Media Society | subcom | BaGL Soc, BaGL
+Calisthenics Society | subcom | CaliSoc, Cali
+UNSW Puzzle Society | subcom | PuzzleSoc, Puzzle
+Engineers Without Borders UNSW | subcom | EWB
+Rap, R&B and Hip Hop Appreciation Society | subcom | RapSoc, Rap
+Students of Chemistry Society | director | SOCS
+UNSW Lion Dance Club | director | LionSoc, Lion
+UNSW Cooking Society | director | Cooksoc, Cook
+Exchange Society | director | ExSoc
+Connect Society | director | CoSoc
+Renewable Energy Society | director | RESOC
+UNSW Fashion and Beauty Society | director | FABSOC, FAB
+Postgraduate Business Society | director | PBSoc
+Exotic Beer Society | director | Exosoc, Exo
+Railway & Transit Society | director | RailSoc, Rail, railway, trains, railsoc
+Linux Society | director | LinSoc, Lin
+Webcomic Society | director | WCSoc
+UNSW Malayalee Society | director | UMS
+UNSW Hard Dance Society | director | HarddSoc, Hardd
+Indonesian Students Association | director | ISA
+Association of Population Health | director | AOPH
+International Students Association | director | ISA
+Society of Telecommunications and Electrical Engineers for Postgraduates | director | steep
+Medical Society | director | MEDSOC, MED, med soc
+UNSW Giving Sight Society | director | Giving Sight
+Compassion UNSW | director | 
+UNSW Mahjong and Chinese Boardgame Society | director | UNSW MCBSoc, UNSW MCB
+Astrobiology Society | director | ABSoc
+Collectibles Club | director | CollectClub
+TEDxUNSW | director | TEDSoc, TED
+Lynx Racing UNSW | director | LRU
+Femboy Society | director | femboysoc
+St John Ambulance Student Society | director | 
+Philip Baxter College | director | Baxter, baxter college
+Sanrio Lovers Society | director | SanrioSoc, Sanrio
+Mechanical Engineering Postgraduate Society | director | MEPS
+The University of New South Wales Buddhist Society | director | UNIBUDS
+Film Production Society | director | FilmProSoc, FilmPro
+UNSW Singing Society | director | SingSoc, Sing
+UNSW Aviation Society | director | AvSoc
+Boba Society UNSW | director | UBS, boba, bubble tea
+Campus Runners | director | Runsoc, Run
+Bluesat | director | 
+UNSW Korean Student's Association | director | KSA
+Women In Consulting | director | WIC
+Medical Science Society | director | MSS
+Physiotherapy & Exercise Physiology Society | director | PEPSoc, PEP
+Ministry of Dance Society | director | MODSoc, MOD
+Asian Studies Association | director | ASA
+Froyo Society | director | froyosoc, froyo
+Mechanical Keyboards Society | director | KeebSoc, Keeb, keyboards, mechanical keyboards
+Musical Theatre Society | director | MTS
+UNSW Photography Society | director | PhotoSoc, Photo
+Rock Music Society | director | RockSoc, Rock
+SEGA Society | director | SEGA SOC, SEGA
+Women in Economics Society | director | WIES
+Built Environment Student Association | director | BESA
+D2MG Hip Hop Society | director | D2MG
+Redback Racing | director | Redback
+Myanmar Students' Society | director | MSS
+French Society | director | FrSoc
+ISOC Students | director | ISOCS
+Day Trading Society | director | DTS
+UNSW Biological and Ecological Sciences Society | director | BIOSOC, BIO
+UNSW Association of Pharmacy Students | director | UNSWAPS
+UNSW Food For All | director | FFA
+Pasifika Society | director | PasifikaSoc, Pasifika
+UNSW Bionic Heart (UBH) | director | UBH
+Game Making Society | director | GMSoc
+Catholic Society | director | Catholic Society of Saint Paul
+UNSW Film Society | director | FilmSoc, Film
+Criminology Society | director | crimsoc
+Daily Delight Disrupt | director | DDD
+Financial Planning Student Group | director | FPSG
+Personalised English Language Enhancement Society | director | PELESoc, PELE
+Rubik Society | director | 
+UNSW Hong Kong Student Association | director | HKSA
+UNSW Taiwanese Students Association | director | TSA
+Spanish & Latin American Society UNSW | director | SLAS
+Piano Society UNSW | director | UNSW PianoSoc, UNSW Piano
+Slavic Society | director | SlavSoc, Slav
+Smash Brothers | director | smash, smash bros
+Robogals | director | 
+Malaysian Students' Organisation | director | MSO
+Chinese Creative Arts Club | director | CCAC
+Western Sydney Society | director | WestSoc, West
+History Society | director | History Soc, History
+New South Wales Uni Theatrical Society | director | NUTS
+Plastic Model Kit Society | director | PlamoSoc, Plamo, plamo, model kits
+Skate Society | director | SkateSoc, Skate
+Motorcycle Society | director | UNSWMS
+UNSW Alternative Fashion Society | director | AFS
+E-Commerce Society | director | ECS
+Coin Society | director | CoinSoc, Coin
+Neuroscience Society | director | 
+Queer Students in STEM | director | QSIS
+Goldstein College | director | 
+The Open Gavel Project Australia | director | TOGPA
+Car Society | director | CarSoc, Car
+Society of Vietnamese International Students at UNSW | director | SoVIS
+UNSW Liberty Club | exec | ULC
+UNSW Nepalese Society | exec | UNSWNEPSOC, UNSWNEP
+UNSW Brazilian Jiu-Jitsu and Wrestling Society | exec | JitSoc, Jit
+Vocallective | exec | VocSoc, Voc
+UNSW ASEAN Society | exec | ASEANSOC, ASEAN
+Australian Wall Street at UNSW | exec | AWS@UNSW
+Fig Tree Hall College | exec | FTH
+Society of Orchestra and Pipers | exec | SOAP
+TeoChew Students Association | exec | TCSA
+International Law Students Society | exec | ILSoc
+UNSW Pakistani Students Society | exec | UNSW PAKSOC, UNSW PAK
+Australasian Union of Jewish Students | exec | AUJS
+Research Seminar Association | exec | RSA
+Rocketry Society UNSW | exec | UNSWRS
+Environmental Management Club | exec | EM Club
+Mature Age Students Society | exec | MASS
+Quantum Engineering Society | exec | Q-Soc
+UNSW Food Science Association | exec | FSA
+Young Entrepreneurs Program | exec | YEP!
+International House Residents' Society | exec | IH RESOC, IH RE
+UNSW Consulting Club | exec | UCC
+UNSW Furry Society | exec | FurSoc, Fur
+Materials Science and Engineering Society | exec | MATSOC, MAT
+Chem E Car | exec | CEC, chem e car, chemecar
+UNSW Sri Lankan Society | exec | SLSoc
+Student Energy UNSW | exec | StuEnergy
+Geoscience Society | exec | GEOSOC, GEO
+VR Society UNSW | exec | VRSoc
+Nippon Students Association | exec | NSA
+Fighting Games Society UNSW | exec | FGSoc
+Saudi Student Association | exec | SSA
+UNSW Punjabi Society | exec | punsoc, punjabi
+UNSW Bangladeshi Society | exec | Bangladeshi Society
+Ancient Languages & Culture Society | exec | AncientSoc, Ancient
+Christian Union | exec | CU
+Filipino Students' Society | exec | FiloSoc, Filo
+Jam In A Jar Charity Concert | exec | Jam
+Social Sciences Society | exec | SoSciSoc, SoSci
+English & Creative Writing Society | exec | ECW
+UNSW Nuclear Society | exec | NuSoc
+UNSW Philosophy Society | exec | UNSW PhiSoc, UNSW Phi
+Geoguessr Society | exec | PlonkSoc, Plonk, geoguessr
+UNSW Chemical Engineering Research Society | exec | CERS
+Antique Society | exec | OldSoc, Old
+African Students Union | exec | ASU
+AtomCraft Society | exec | AtomCraft
+Singapore Medical Society of UNSW | exec | SMSUNSW
+New College Student Association | exec | NCSA
+Thai Students Society | exec | TSS
+Skylabs UNSW | exec | UNSW DBF
+UNSW Sapphic Society | exec | SapphoSoc, Sappho
+StartUp Link | exec | SupSoc, Sup
+UNSW Hellenic Society | exec | Hellsoc, Hell
+Social Football Society | exec | SFS
+Touhou Project Society | exec | TouhouSoc, Touhou
+Watch Society | exec | UWS
+Arc Canberra | exec | 
+Turkish Society | exec | TurkSoc, Turk
+Civil and Environmental Postgraduate Coursework Association | exec | CEPCA
+Medical Students' Aid Project | exec | MSAP
+Computer Engineering Society | exec | CompEngSoc, CompEng
+Student Outreach to the World | exec | SOW
+Medshow UNSW | exec | medshow
+Paddington Campus Society | exec | PCS
+The New Zealand Society | exec | KiwiSoc, Kiwi
+No-Code Society | exec | NCS
+Magic and Cardistry Society | exec | MACS
+UNSW KOSTA | exec | KOSTA
+Cantonese Christian Fellowship | exec | CCF
+Minerals and Energy Resources Engineering Society | exec | MERESoc, MERE
+Disability Inclusion and Accessibility Society | exec | DIAAS
+Cambodian Society | exec | CamboSoc, Cambo
+UNSW Robotics Competition Club | exec | URCC
+Young Australian Lebanese Association | exec | YALA
+Iranian Student Association | exec | IRANSA
+UNSW Hall | exec | 
+Organisation of Planning Students | exec | OOPS
+UNSW Social Work Student Association | exec | SWSA
+Liberal Club | exec | 
+Greens on Campus UNSW | exec | The UNSW Greens
+Stand-Up Comedy Club | exec | ComedyClub
+Port Medical Society | exec | PMS
+AhlulBayt Islamic Society UNSW | exec | ABSoc
+Students for Palestine UNSW | exec | Students for Palestine
+UNSW Cheer and Dance Society | exec | CheerSoc, Cheer
+Masters of International Business Society | exec | MIBSoc, MIB
+Wagga Wagga Rural Undergraduate Medical Society | exec | WRUMS
+Warrane College | exec | WARSOC, WAR
+Shalom College Residents Society | exec | RESSOC, RES
+UNSW Bridge Society | exec | BridgeSoc, Bridge
+Women in Aviation Society | exec | WIASoc, WIA
+Chinese Musician Society | exec | CMS
+Nutrition, Dietetics & Food Innovation Society | exec | DietSoc, Diet
+Samuel Griffiths Society | exec | SGS UNSW
+General Practice Students' Network UNSW | exec | GPSN
+Medical Outreachers Australia | one | MOA
+Rehabilitation Engineering Society | one | RehabEng UNSW
+AIESEC | one | 
+Debating Society | one | DebSoc, Deb
+Retro Games Society | one | RetroSoc, Retro
+UNSW Socialists | one | Socialists
+Fred Hollows Society | one | FREDSOC, FRED
+Indie Games Society | one | IGS
+Co-op Society | one | Co-opSoc, Co-op
+Chinese Debating Club | one | CDC
+Dodgeball UNSW | one | DodgeUNSW
+Diabolo Club | one | DBL
+SOFIA UNSW Orthodox Christian Fellowship | one | SOFIA UNSW
+UNSW Tetris Society | one | TetrisSoc, Tetris
+Labor Club | one | 
+UNSW European Society | one | UNSW EuroSoc, UNSW Euro
+UNSW Bloom Collective | one | Bloom Co.
+Business Analytics Society | one | BASOC
+Trivia Society UNSW | one | TrivSoc, Triv
+Legends of the Three Kingdoms | one | SanGuoSha
+Effective Altruism UNSW | one | EAU
+Albury Wodonga Medical Students' Society | one | Albury Wodonga Medical Students Society
+UNSW Telugu Society | one | UTS
+Australian Youth Climate Coalition (AYCC) UNSW | one | AYCC UNSW, AYCC
+Quadball Society | one | QUADB, quadball, quidditch, quadsoc
+Project Hope UNSW | one | 
+Australia Awards Scholars Society | one | AASSoc, AAS
+Fishing Society UNSW | one | FishSoc, Fish
+Side Quest UNSW | one | SQS
+UNSW Labor Left | one | Labor Left
+The Women in Electrical Engineering and Telecommunications | one | TWEET
+Students Of Korean Studies | one | SOKS
+Adventist Students on Campus | one | Advent Hope
+Basser College | one | 
+Youth Music Mission | one | YMM
+Fried Chicken Society | one | FriedSoc, Fried
+International Psychology Students Association | one | IPSA
+UNSW Surveying Society | one | SurvSoc, Surv
+AgriCycle UNSW | one | AgriCycle
+Colombo House Residents Club | one | 
+Souls Society | one | SoulsSoc, Souls
+UNSW String Ensemble | one | UNSWSE
+Hong Kong and Macau Medical Society | one | HKMOMS
+Assyrian Students' Association | one | ASA
+EMU Robotics | one | EMU
+Little Sister, Big Sister | one | LSBS
+Civil & Environmental Engineering Research Student Association | one | CERSA
+MEREly Researchers | one | MERER
+Cardiology Society | one | CardioSoc, Cardio
+Human Resources Student Association | one | HRSA
+Coffs Harbour Undergraduate Medical Society | one | CHUMS
+Hillsong On Campus UNSW Society | one | HoC
+Visual Novel Club | one | UVNC
+Parallel Press Club | one | PPC
+Web3 Club | one | Web3
+We The Free - Animal Rights UNSW | one | WTF - Animal Rights
+Overseas Christian Fellowship | one | OCF
+Enrich Mandarin Bible Study | one | EMBS
+Reformed Evangelical Fellowship | one | REF
+ArtBridge Curatorial Club | one | ArtBCC
+Dessert and Street Food Society | one | DSF
+UNSW Christian Students | one | UCS
+Surgical Society | one | SurgSoc, Surg
+Bhutanese Society | one | BhutanSoc, Bhutan
+Revelations and Quests Society | one | RAQSoc, RAQ
+Futures Society UNSW | one | FutureSoc, Future
+H2 Engineering UNSW | one | HEU
+Downhill Mountain Bike Club | one | DHMTB
+First Nations Engineering and Science Society | one | FNESS
+UNSW First Nations Business Society | one | FNBS
+Asian Medical Students' Association | one | AMSA
+Student Legal Education Group (SLEG) | one | SLEGS, SLEG
+North American Society (NAS) | one | NASN, NAS
+UNSW Public Policy Society | one | UPPS
+Go Society UNSW | one | GoSoc
+UNSW Red Herring Period Society | one | URHPS
+Persona Society | one | persona`
+},
+{
+  prompt: "Name a role on a Club's exec team",
+  hint: '▼ any title · "VP of Careers" counts as Careers ▼',
+  strip: ['the','of','and'],
+  generic: ROLE_GENERIC,
+  loose: true,
+  answers: `
+President | fresher | pres, prez
+Vice President | fresher | vp, vice pres, vice-president
+Treasurer | fresher | treasury, finance, finance officer, Financing Executive
+Secretary | fresher | sec, House Secretary, SArcretary
+Welfare Officer | subcom | welfare, wellbeing, wellbeing officer, wellness officer, Welfare Director, Wellbeing Officer, Wellbeing officer, Wellness Officer, Yamaxanadu (Welfare Officer)
+Events | subcom | event, events director, events officer, Activity Director, Activity Manager, Assistant Events Director, Battle Events Director, Director of Events, Event Coordinator, Event Director, Event Directors, Event Manager, Events Co-Director, Events Coordinator, Events Director, Events Executive, Events Manager, Events Officer, Events Planner, Events VP, Events Vice President, Events director, Minister of activities, Pharmacy Awareness Events Executive, Puzzle Events Director, VP Activities, VP Events, Vice President (Activities), Vice President (Events), Vice President - Events, Vice President Activities, Vice President of Activities, Vice President of Events, Vice minister of activities, Vice-President Events
+Marketing | subcom | marketing director, publicity, pr, promotions, Assistant Marketing Director, Director of Marketing, Marketing & Comms Team, Marketing Coordinator, Marketing Director, Marketing Directors, Marketing Executive, Marketing Manager, Marketing Officer, Marketing VP, Marketing Vice President, Marketing/Public Relations Executive, Minister of publicity/Vice Minister of Publicity, PR Director, Promotion Head, Public Relation Director, Public Relations, Public Relations Executive, Public Relations Officer, Public Relationship Officer, Publicity, Publicity Manager, Publicity Officer, Publicity Vice President, VP Marketing, Vice President (Branding), Vice President (Marketing), Vice President - Marketing, Vice President Marketing, Vice President for Marketing, Vice President of Marketing, Vice President of Physical Marketing
+Arc Delegate | subcom | arc rep, delegate, arc liaison, ARC-Delegate, Arc Delegator, Arc Liaison, Business School and Arc Delegate
+General Executive | subcom | gen exec, general exec, ordinary member
+Grievance Officer | subcom | grievance, grievances, Female Grievance Officer, Grivance Officer, Male Grievance Officer
+Socials | director | social, socials director, social events, Social Coordinator, Social Director, Social Secretary, Social Vice President, Socials Director, Socials Executive, Socials Manager, Socials Vice President, Socials director, Vice President (Socials), Vice President Socials, Vice President of Socials, Vice-President of Socials
+EDI Officer | director | edi, gedi, equity officer, diversity officer, inclusion officer, equity diversity and inclusion, Cultural Diversity Officer, DEI Officer, Diversity  and Inclusion (EDI) officer, Equity Officer, Equity  Diversity & Inclusion Officer, Equity  Diversity and Inclusion Officer, Equity  Inclusion and Diversity Officer, GEDI, GEDI Officer, POC Officer
+Media | director | multimedia, media director, Digital Content Director, Media Coordinator, Media Director, Media Executive, Media Officer, Media director, Minister of media/Vice Minister of Media, Multimedia Head, Photos and Videos Director, Vice President (Media), Vice President - Media, Vice President of Multi-Media, Vice President of Multimedia
+Externals | director | external, external relations, vp externals, External Liaison, External Relations, External Relations Director, External Relationship Coordinator, Minister of external relation, Relations Officer, VP- Externals, Vice President (External), Vice President (Externals), Vice President - Externals, Vice President External, Vice President Externals, Vice President of External Relations, Vice President of Externals, Vice minister of external relation
+Sponsorships | director | sponsorship, sponsor, partnerships, business development, bd, Alumni and Sponsorships Officer, BD Director, Business Director, Business Vice President, Director of Business, Partnerships Officer, Sponsorship Director, Sponsorship Executive, Sponsorship director, Sponsorships Coordinator, Sponsorships Director, Sponsorships Executive, Sponsorships Officer, Sponsorships Vice President, Vice President (Sponsorships), Vice President - Sponsorships, Vice President of Business Development, Vice President of Sponsorship
+Education & Academics | director | education, academics, academic, workshops, Academic Director, Academic Executive, Academics Executive, Academics Officer, Education Director, Education Executive, Education Officer, Phase 1 Academics, Phase 2 academics, Phase 3 academics, Schools Executive, VP Education, Vice President (Education), Vice President Education, Vice President of Education, Workshops Executive, Workshops Vice President
+Co-President | director | 
+Careers & Industry | director | careers, career, industry, industry relations, Career Planning Director, Careers Director, Careers Officer, Industry Director, Industry Engagement Director, Industry Executive, Industry Relations Vice President, Industry Representative, Industry Vice President, VP Industry, Vice President (Careers), Vice President Careers, Vice President of Career Planning
+Design & Creatives | director | design, creative, creatives, graphic design, designer, Arts Director, Creative Design Officer, Creative Director, Creative Vice President, Creatives, Creatives Director, Creatives Executive, Design Co-Lead, Design Director, Design Officer, Design and Arts Executive, Graphic Director, Vice President Creatives, Vice President and Vice President of Fine Arts, Vice-President of Creatives, Visual Design Director
+Internals | director | internal, vp internals, VP Internals, VP-Internals, Vice President (Internal), Vice President (Internals), Vice President - Internals, Vice President Internal, Vice President Internals, Vice President of Internals, Vice-President (Internals)
+Tech & IT | director | it, tech, technology, technical director, Chief Technical Officer, Head of Engineering, IT Vice President, IT/Technology Director, Tech Director, Tech Officer, Technical Director 1, Technical Director 2, Technical Executive, Technical Officer, Vice President Engineering, Vice President Technology, Vice President of Technology
+Human Resources | director | hr, people and culture, talent, HR, HR Director, HR Vice President, Human Relations Officer, Human Resource Director, Human Resources Director, Human Resources Executive, Vice President (Human Resources), Vice President HR, Vice President of Talent Management
+Student Representative | director | year rep, first year rep, first year representative, student rep, 2nd Year Representative, 3rd Year Representative, 4th Year Representative, Coursework Student Representative, Final Year Representative, First Year Delegate, First Year Representative, HDR Rep, Second Year Representative, Society Representative, Student Voice Officer, Third Year Representative, Undergraduate Representative
+Operations | director | ops, logistics, admin, administration, Admin Officer, Administrative Officer, Administrator, Head Admin, Logistics Director, VP Operations, Vice President (Operations), Vice President - Operations, Vice President Operations, Vice President of Operations
+Social Media | director | socmed, social media manager, Social Media Coordinator, Social Media Director, Social Media Manager, Social Media Officer, Social Media Secretary, Social Media officer
+Director | director | 
+Projects | exec | project, projects director, Locals Projects, Programs Vice President, Projects Coordinator, Projects Officer, Rural Projects Director, Vice President (Programs), Vice President (Projects), Vice President Projects
+Development | exec | Development Director, Development Manager, Development Officer, Vice President (Development)
+Publications | exec | Publications Director, Publications Officer, Vice President (Publications)
+Sports | exec | sport, sports director, Sport Director, Sports Director
+Communications | exec | comms, communication, Communication Officer, Communications Co-Director, Communications Officer
+Outreach & Community | exec | outreach, community, Community Director, Community Officer, Outreach Chair, Outreach Executive, Outreach Officer, Vice President of Global Volunteer
+Special Interest Groups | exec | sig, special interest group, Vice President of Special Interest Group
+Peer Mentoring | exec | mentor, mentoring, peer mentor, Mentor, Peer Mentor Director, Peer Mentoring Coordinator
+Producer | exec | production, productions, Production Director, Productions Director, Productions Vice President, Supervising Producer
+Music Director | exec | music, Co-Music Director 1, Co-Music Director 2, Ensembles Director, Vice-President (Orchestra), Vice-President (Wind Symphony), Vocals Director
+Membership & Engagement | exec | membership, engagement, Membership Chair, Membership Engagement Director, Membership Officer, Student Engagement Coordinator, Vice President (Engagement)
+Women's Officer | exec | womens officer, women officer
+Chair | exec | chairperson, convenor, Chairperson, Convenor, House Chairperson
+Culturals | exec | cultural, culturals director, Cultural Director, Culturals Director
+Fundraising & Charity | exec | fundraising, charity, philanthropy, Charities Director, Fundraising Executive, Philanthropy Director
+Performance Director | exec | performance
+International Officer | exec | international, internationals, International Representative, Internationals Director
+Returning Officer | one | 
+Safety Officer | one | 
+Freestyle Team Leader | one | Freestyle Team Co-Leader
+Competitions | one | competition, comps, Competitions Co-Director, Competitions Coordinator, Vice President (Competitions)
+YO Director | one | 
+Merch | one | merchandise, merch officer, Merch Officer, Merchandise Coordinator, Merchandising Officer
+Country Co-ordinator | one | japan co-ordinator, new zealand co-ordinator, country coordinator, Japan Co-ordinator, New Zealand Co-ordinator
+Debating Team Manager | one | 
+IRC Representative | one | IRC
+Choreographer | one | choreo, head choreo, chorey crew leader, Chorey Crew Leader, Head Choreo
+Team Lead | one | 
+Global Health Representative | one | 
+Advocacy | one | Advocacy Director
+Head Pacer | one | 
+Adjudication Officer | one | 
+Club Advocate | one | 
+Vice Chair | one | 
+BEES Coordinator | one | 
+Room Booking Officer | one | Room Booking
+AMSA & NSWMSC Representative | one | 
+Costumes and Properties Officer | one | 
+Chair of the Academic Board | one | 
+Service Coordinator | one | 
+Devotional Coordinator | one | 
+Compliance Officer | one | Compilance Officer
+Conference Director | one | 
+Sacca Editor | one | 
+Meditation Coordinator | one | 
+Sideline Coordinator | one | 
+Screenings Director | one | 
+PNW Coordinator | one | 
+Roundtable Director | one | 
+Teaching Assistant | one | 
+First Nations Officer | one | First Nations Oficer
+Chief Navigator | one | 
+Flying Director | one | 
+Clubs Assistant Manager | clever | assistant clubs manager
+Clubs Manager | clever | arc clubs manager
+Clubs Officer | clever | arc clubs officer
+Clubs Events Coordinator | clever | arc events coordinator
+Clubs Wellbeing & Grievances Coordinator | clever | clubs wellbeing coordinator
+Clubs Administration Coordinator | clever | clubs admin coordinator
+Digital Project Manager | clever |`
+},
+{
+  prompt: 'Name a country or culture with its own UNSW Club',
+  hint: '▼ the place or the people both count ▼',
+  strip: ['the','unsw','society','soc','students','student','association','union','organisation','organization','club','s'],
+  answers: `
+Australia | clever | australian, aussie
+China | fresher | chinese, csa, acya
+India | fresher | indian, indsoc
+Vietnam | fresher | vietnamese, vsa, sovis
+Arab world | fresher | arab, arabic, arabsoc
+Japan | subcom | japanese, nippon, ajcsoc
+Tamil | subcom | tamil nadu, anjali
+Singapore | subcom | singaporean
+Kerala | subcom | malayalee, malayali
+Indonesia | subcom | indonesian
+Korea | subcom | korean, ksa, south korea, korean studies
+Myanmar | subcom | burmese, burma
+France | subcom | french, frsoc
+Pasifika | director | pacific islands, pacific islander, pasifikasoc
+Hong Kong | director | hksa, hongkong, hong konger
+Taiwan | director | taiwanese
+Spain & Latin America | director | spanish, spain, latin america, latin american, hispanic, slas
+Slavic | director | slav, slavs, slavsoc
+Malaysia | director | malaysian, mso
+Nepal | director | nepalese, nepali
+ASEAN | director | southeast asia, south east asia, aseansoc
+Teochew | director | teochew people
+Pakistan | director | pakistani, paksoc
+Sri Lanka | exec | sri lankan, slsoc
+Saudi Arabia | exec | saudi
+Punjab | exec | punjabi
+Bangladesh | exec | bangladeshi
+Philippines | exec | filipino, filo, filosoc, pilipinas
+Africa | exec | african, asu
+Thailand | exec | thai
+Greece | exec | greek, hellenic, hellsoc
+Turkey | exec | turkish, turkiye, turksoc
+New Zealand | exec | kiwi, kiwisoc, nz
+Cambodia | one | cambodian, khmer, cambosoc
+Lebanon | one | lebanese, yala
+Iran | one | iranian, persian, iransa
+Europe | one | european, eurosoc
+Telugu | one | andhra pradesh, telangana, telugu people
+Assyria | one | assyrian
+Bhutan | one | bhutanese, bhutansoc
+North America | one | north american, usa, america, american, canada, canadian`
+},
+{
+  prompt: 'Name an Arc Sport Club',
+  hint: '▼ the sport is enough ▼',
+  strip: ['the','unsw','club','and','men','mens','women','womens','arc','sport'],
+  answers: `
+Football | fresher | soccer
+Basketball | fresher | bball
+Volleyball | fresher | volley
+Badminton | fresher |
+Tennis | subcom |
+Swimming | subcom | swim
+Netball | subcom |
+AFL | subcom | aussie rules, australian rules football
+Rugby Union | subcom | rugby
+Cricket | subcom |
+Table Tennis | subcom | ping pong
+Touch Football | director | touch
+Hockey | director | field hockey
+Boxing & Muay Thai | director | boxing, muay thai
+Rowing | director |
+Archery | director |
+Athletics | director | track, track and field
+Fencing | director |
+Ultimate Frisbee | director | ultimate, frisbee
+Cycling & Triathlon | director | cycling, triathlon
+Taekwondo | director | tkd
+Karate | exec |
+Judo | exec |
+Kendo | exec |
+Aikido | exec |
+Baseball Softball | exec | baseball, softball
+Squash | exec |
+Gridiron | exec | american football
+Lacrosse | exec |
+Handball | exec |
+Water Polo | exec | waterpolo
+Outdoors | exec | bushwalking, hiking
+Underwater | one | scuba, diving, underwater club
+Underwater Rugby | one |
+Waterski & Wakeboard | one | waterski, water ski, wakeboard, wakeboarding
+Windsurfing, Surfing & Sailing | one | windsurfing, surfing, sailing, surf
+Target Rifle | one | rifle, shooting
+Taido | one |`
+},
+{
+  prompt: 'Name a building or outdoor space Clubs can book',
+  hint: '▼ buildings and lawns, not room numbers ▼',
+  strip: ['the','unsw','building','buildings','theatre','theatres','theater','theaters','lecture','auditorium','room','rooms','area'],
+  generic: ['lawn','lawns','courtyard','garden','gardens','park','paved','gravel','walkway','steps','hall','centre','center','studio','space','plaza','terrace','near','outside','by','in','at','on','of','and','the','sir','john','east','west','north','south','g03','bbq','bbqs'],
+  loose: true,
+  dropDigits: true,
+  answers: `
+Library Lawn | fresher | lib lawn, library lawn gravel area
+Quadrangle | fresher | quad, quadrangle building, quad lawn, macauley theatre
+Roundhouse | fresher | round house, unibar
+Library | fresher | main library, main lib, lib, library stage 2
+Law Building | fresher | law, law school, law library, law theatre
+Mathews | fresher | mathews building, mathews theatres, matthews, matthews building
+Village Green | subcom | vg, village green bbq, village green pitch
+Ainsworth Building | subcom | ainsworth
+Colombo Building | subcom | colombo, colombo theatres
+Business School | subcom | business school building, the place
+Tyree Energy Technology | subcom | tyree, tetb, michael hintze theatre, hintze
+Anita B. Lawrence Centre | subcom | anita b lawrence, anita lawrence, lawrence centre, red centre, red center, lawrence theatre
+Patricia O'Shane | subcom | patricia oshane, patricia o shane, central lecture block, clb, pos, diane kell theatre, judith bullerwell theatre
+John Clancy Auditorium | subcom | clancy, sir john clancy, clancy auditorium
+Science Theatre | subcom | science
+John Niland Scientia | subcom | scientia, leighton hall, scientia building
+Webster | director | webster building, webster theatres, robert webster, new south global theatre
+Squarehouse | director | square house
+Morven Brown Building | director | morven brown
+Electrical Engineering Building | director | electrical engineering, ee building
+Civil Engineering Building | director | civil engineering, civil
+Goldstein | director | goldstein building
+Old Main Building | director | old main
+Physics Theatre | director | physics
+Blockhouse | director | block house
+Keith Burrows Theatre | director | keith burrows
+AGSM | director | pioneer international theatre, john b reid theatre
+June Griffith Building | director | june griffith, chemical sciences, chem sciences
+Science & Engineering Building | director | science and engineering, seb
+Physics Lawn | director | physics lawn
+Alumni Park | director | alumni park lawn, alumni park east, alumni park west, alumni lawn
+Chancellor's Garden | director | chancellors garden, chancellor garden
+Basser Steps | director | basser
+Rex Vowels Theatre | exec | rex vowels
+Rupert Myers Theatre | exec | rupert myers
+John Goodsell Building | exec | goodsell, john goodsell
+Newton Building | exec | newton
+Biological Sciences West | exec | biological sciences, bioscience, biosciences, bio sciences, biological sciences west
+Vallentine Annexe | exec | vallentine
+Morven Brown Lawn | exec | brown lawn
+Helen Maguire Paved Area | exec | helen maguire, helen maquire, bottom of basser steps, helen maguire lawn
+Goldstein Courtyard | exec | goldstein court
+Catherine Harris Courtyard | exec | catherine harris
+Library Walkway | exec | library walk
+Michael Birt Lawn | one | michael birt, michael birt gardens
+Merilyn Sleigh Lawn | one | merilyn sleigh, marilyn sleigh
+Eleanora Kopalinsky Lawn | one | eleanora kopalinsky, kopalinsky
+John Lion's Garden | one | john lions, john lion, john lions garden
+Patricia O'Shane Courtyard | one | oshane courtyard, o shane courtyard
+Naked Lady Lawn | one | naked lady, naked ladies, naked lady statue
+Randwick Campus | clever | randwick, r14, building r14
+UNSW City Centre | clever | city centre, city campus, cbd campus, cbd
+Parramatta Innovation Hub | clever | parramatta, parra`
+},
+{
+  prompt: 'Name a game, show or fandom with its own UNSW Club',
+  hint: '▼ if there is a Club for it, it counts ▼',
+  strip: ['the','unsw','society','soc','club','appreciation','lovers','project','fan','fans'],
+  answers: `
+Anime | clever | animeunsw
+Poker | fresher | pokersoc, texas holdem
+Minecraft | fresher | mcsoc, minecraftsoc
+Tabletop Games | fresher | tabletop, board games, boardgames, ttg, dnd, d and d, dungeons and dragons
+Pokemon | subcom | pokesoc
+League of Legends | subcom | league, lol, riot, riot games, valorant, riotsoc
+Rhythm Games | subcom | osu, maimai, rgs
+Chess | subcom | chess club
+Genshin Impact | subcom | genshin, hoyoverse, hoyosoc, honkai, star rail, zenless
+Roblox | subcom | rosoc
+Nintendo | director | ninsoc, mario, zelda
+K-pop | director | kpop, kpopsoc
+Boys Love | director | bl, girls love, bagl, bagl media
+Webcomics | director | webcomic, wcsoc
+Mahjong | director | mahjong and chinese boardgames, mcbsoc
+Sanrio | director | hello kitty, sanriosoc
+SEGA | director | sonic, segasoc
+Rubik's Cube | director | rubiks, rubik, rubiks cube, speedcubing
+Super Smash Bros | exec | smash, smash bros, smash brothers
+Furries | exec | furry, fursoc, furry fandom
+Fighting Games | exec | street fighter, tekken, fgsoc
+GeoGuessr | exec | plonk, plonksoc, geo guessr
+Touhou | exec | touhousoc
+Bridge | exec | bridgesoc, contract bridge
+Retro Games | exec | retro gaming, retrosoc
+Indie Games | one | indie gaming
+Tetris | one | tetrissoc
+Legends of the Three Kingdoms | one | three kingdoms, sanguosha, sgs
+Souls games | one | dark souls, souls, soulslike, elden ring, soulssoc
+Visual Novels | one | visual novel, vnc, uvnc
+Persona | one | persona 5, persona society
+Go | one | go board game, baduk, weiqi, gosoc`
+},
+{
+  prompt: 'Name something in the Arc Rewards Store',
+  hint: '▼ spend your Rewards Points on it ▼',
+  strip: ['the','a','an','arc','do','good','things','clubs','club','rewards','reward','annual','subscription','premium','pro','spend','at','voucher','vouchers','card','20','25','50','75','100','200','custom','points'],
+  generic: ['some','free','item','merch','my','new','one'],
+  loose: true,
+  answers: `
+Rewards Grant | fresher | grant, $25 rewards grant, $50 rewards grant, $75 rewards grant, $100 rewards grant
+Rewards Blind Box | subcom | blind box, mystery box
+Prezzee Voucher | subcom | prezzee, prezzie, $20 prezzee, $50 prezzee, gift card
+$20 Home Ground / Roundhouse Voucher | subcom | home ground, home ground voucher, roundhouse voucher
+Clubs Coffee Cup | subcom | coffee cup, keep cup, keepcup, cup, mug
+Clubs Power Bank | director | power bank, powerbank, portable charger
+Water Bottle | director | clubs water bottle, do good things water bottle, drink bottle, bottle
+Do Good Things Picnic Blanket | director | picnic blanket, blanket
+Canva Premium Annual Subscription | director | canva, canva premium, canva pro
+Custom Club Banner | director | banner, club banner, custom banner
+Do Good Things Socks | exec | socks, sock
+$200 Catering Spend @ Roundhouse | exec | catering, roundhouse catering, catering spend
+Do Good Things Dad Hat | exec | dad hat, cap, hat
+Do Good Things Sticker Sheet | exec | stickers, sticker, sticker sheet
+Club Event Photography | exec | photography, event photography, photographer
+Clubs Hand Fan | one | fan, hand fan, handheld fan
+CapCut Pro Subscription | one | capcut, capcut pro
+Do Good Things Bucket Hat | one | bucket hat
+$20 Opal Card | one | opal, opal card, opal top up`
+}
+]];
+
+/* ---------- tiers, zones, depth facts ---------- */
+const TIERS = {
+  fresher:  {name:'FRESHER',      pts:10,  desc:'everyone said it',               emoji:'⬜', color:'var(--t-fresher)',  quip:'Half of O-Week said that too.'},
+  clever:   {name:'TOO CLEVER',   pts:15,  desc:'technically right. cheeky.',     emoji:'🟧', color:'var(--t-clever)',   quip:'Technically correct. We will allow it.'},
+  subcom:   {name:'SUBCOMMITTEE', pts:30,  desc:'a solid pick',                   emoji:'🟦', color:'var(--t-subcom)',   quip:'Solid. Your committee would approve.'},
+  director: {name:'DIRECTOR',     pts:60,  desc:'off the beaten path',            emoji:'🟩', color:'var(--t-director)', quip:'Now that is a portfolio pick.'},
+  exec:     {name:'EXEC',         pts:85,  desc:'a proper deep cut',              emoji:'🟪', color:'var(--t-exec)',     quip:'Deep cut. Elected-level knowledge.'},
+  one:      {name:'ONE IN 400',   pts:100, desc:'a hidden gem',                   emoji:'🟨', color:'var(--t-one)',      quip:'A hidden gem. Hardly anyone finds that.'},
+  miss:     {name:'MISS',         pts:0,   desc:'the clock ran out',              emoji:'⬛', color:'var(--t-miss)',     quip:'The sonar beat you to it.'}
+};
+const LADDER_ORDER = ['fresher','clever','subcom','director','exec','one'];
+const M_PER_PT = 10;               // 700 pts = 7,000 m
+const MAX_DEPTH = 700 * M_PER_PT;
+const BANDS = [
+  {from:0,    name:'SUNLIGHT ZONE', desc:'still in sight of the surface',  color:'var(--sky)'},
+  {from:1500, name:'TWILIGHT ZONE', desc:'past the obvious answers',       color:'var(--t-subcom)'},
+  {from:3000, name:'MIDNIGHT ZONE', desc:'where the light gives up',       color:'var(--arc)'},
+  {from:4500, name:'ABYSSAL ZONE',  desc:'very few Club leaders get here', color:'var(--violet)'},
+  {from:6000, name:'HADAL ZONE',    desc:'one in four hundred',            color:'var(--sun)'}
+];
+// Depth markers: facts from the Clubs info sheets, Style Guide and Rewards SOP
+const FACTS = [
+  [120,'── light begins to fade'],
+  [330,'nearly 400 Clubs call Arc home ──'],
+  [560,'── CATS rooms need 7 business days notice'],
+  [820,'outdoor bookings need 14 days ──'],
+  [1150,'── the giant Jenga is 3ft tall'],
+  [1800,'Welfare Officers: mandatory since 2024 ──'],
+  [2150,'── the hot water urn is for water. not coffee.'],
+  [2550,'the giant Connect 4 is 4ft tall ──'],
+  [3350,'── storeroom shelves are named after anime'],
+  [3800,'Venue & Events bookings: 21 days ahead ──'],
+  [4200,'── marquees need a training certificate'],
+  [4900,'only elected Executives belong on Rubric ──'],
+  [5400,'── the largest Clubs program in Australia'],
+  [5800,'Rewards Points launched in T1 2026 ──'],
+  [6500,'── the $100 Rewards Grant is the most redeemed reward'],
+  [6950,'the sea floor. a perfect dive ends here ──']
+];
+const ROUND_MS = 25000, PREVIEW_S = 3;
+
+/* ---------- matching (pure) ---------- */
+function normWords(s){
+  return String(s).normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase()
+    .replace(/&/g,' and ').replace(/['’`]/g,'').split(/[^a-z0-9]+/).filter(Boolean);
+}
+function normKey(s, strip){
+  const w = normWords(s);
+  return (strip ? w.filter(x => !strip.includes(x)) : w).join('');
+}
+function parseAnswers(text){
+  return text.trim().split('\n').map(line => {
+    const [name, tier, aliases=''] = line.split('|').map(x => x.trim());
+    return {name, tier, aliases: aliases ? aliases.split(',').map(a => a.trim()).filter(Boolean) : []};
+  });
+}
+function buildIndex(p){
+  const strip = p.strip || [], generic = p.generic || [];
+  const list = parseAnswers(p.answers);
+  const map = new Map(), core = new Map();
+  for (const a of list){
+    for (const form of [a.name, ...a.aliases]){
+      for (const k of [normKey(form, strip), normKey(form)]) if (k && !map.has(k)) map.set(k, a);
+      if (p.loose){
+        const c = normKey(form, [...strip, ...generic]);
+        if (c && c.length >= 2 && !core.has(c)) core.set(c, a);
+      }
+    }
+  }
+  return {list, map, core, strip, generic, loose: !!p.loose, dropDigits: !!p.dropDigits};
+}
+function osaDistance(a, b, cap){
+  if (Math.abs(a.length - b.length) > cap) return cap + 1;
+  const d = [];
+  for (let i = 0; i <= a.length; i++) d[i] = [i];
+  for (let j = 0; j <= b.length; j++) d[0][j] = j;
+  for (let i = 1; i <= a.length; i++){
+    let rowMin = Infinity;
+    for (let j = 1; j <= b.length; j++){
+      const cost = a[i-1] === b[j-1] ? 0 : 1;
+      d[i][j] = Math.min(d[i-1][j] + 1, d[i][j-1] + 1, d[i-1][j-1] + cost);
+      if (i > 1 && j > 1 && a[i-1] === b[j-2] && a[i-2] === b[j-1]) d[i][j] = Math.min(d[i][j], d[i-2][j-2] + 1);
+      rowMin = Math.min(rowMin, d[i][j]);
+    }
+    if (rowMin > cap) return cap + 1;
+  }
+  return d[a.length][b.length];
+}
+const capFor = len => len >= 9 ? 2 : len >= 5 ? 1 : 0;
+function fuzzyIn(map, k, minLen){
+  const cap = capFor(k.length);
+  if (!cap) return null;
+  let best = null, bestD = cap + 1;
+  for (const [key, ans] of map){
+    if (key.length < (minLen || 4)) continue;
+    const dist = osaDistance(k, key, cap);
+    if (dist < bestD){ bestD = dist; best = ans; }
+  }
+  return best;
+}
+// Returns {answer, exact} or null. exact:false means "ask the player to confirm".
+function findMatch(idx, input){
+  const k1 = normKey(input, idx.strip), k2 = normKey(input);
+  if (!k1 && !k2) return null;
+  // 1. the whole guess, exactly
+  if (k1 && idx.map.has(k1)) return {answer: idx.map.get(k1), exact: true};
+  if (k2 && idx.map.has(k2)) return {answer: idx.map.get(k2), exact: true};
+  if (idx.loose){
+    // 2. peel generic words ("vice president of careers" -> "careers")
+    const c = normWords(input).filter(w => !idx.strip.includes(w) && !idx.generic.includes(w) && !(idx.dropDigits && /\d/.test(w))).join('');
+    if (c){
+      if (idx.core.has(c)) return {answer: idx.core.get(c), exact: true};
+      if (idx.map.has(c)) return {answer: idx.map.get(c), exact: true};
+      const fc = fuzzyIn(idx.core, c);
+      if (fc) return {answer: fc, exact: true};
+    }
+  }
+  // 3. the whole guess, small typos
+  const k = k1 || k2;
+  const f = fuzzyIn(idx.map, k);
+  if (f) return {answer: f, exact: false};
+  if (idx.loose){
+    // 4. any single meaningful word in the guess ("head of marketing & comms" -> marketing)
+    const words = normWords(input).filter(w => !idx.strip.includes(w) && !idx.generic.includes(w) && w.length >= 3);
+    let best = null, bestLen = 0;
+    for (const w of words){
+      const hit = idx.core.get(w) || idx.map.get(w) || fuzzyIn(idx.core, w, 5);
+      if (hit && w.length > bestLen){ best = hit; bestLen = w.length; }
+    }
+    if (best) return {answer: best, exact: false};
+  }
+  return null;
+}
+function bandFor(depth){ let b = BANDS[0]; for (const x of BANDS) if (depth >= x.from) b = x; return b; }
+function sydneyParts(date){
+  const parts = new Intl.DateTimeFormat('en-AU', {timeZone:'Australia/Sydney', year:'numeric', month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit', second:'2-digit', hourCycle:'h23'}).formatToParts(date);
+  const o = {}; for (const p of parts) o[p.type] = p.value; return o;
+}
+/* ---------- end of pure logic ---------- */
+
+(function(){
+  if (typeof document === 'undefined') return;
+  const $ = id => document.getElementById(id);
+  const scene = $('scene'), column = $('column'), canvas = $('bg'), diver = $('diver');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const SET = DAILY_SETS[0];
+  const INDEXES = SET.map(buildIndex);
+  const STORE_KEY = 'deepend:v3:result';
+  $('diveNo').textContent = EVENT_LABEL;
+  if (!PREVIEW_MODE){ document.querySelectorAll('.ph').forEach(e => e.remove()); }
+
+  /* ================= pixel sprites ================= */
+  function sprite(rows, pal, w){
+    let r = ''; rows.forEach((row, y) => [...row].forEach((c, x) => { if (pal[c]) r += `<rect x="${x}" y="${y}" width="1" height="1" fill="${pal[c]}"/>`; }));
+    return `<svg viewBox="0 0 ${w || rows[0].length} ${rows.length}" shape-rendering="crispEdges" aria-hidden="true">${r}</svg>`;
+  }
+  const FISH = ['......GGGGG.....','....GGGGGGGGG...','..GGGWWGGGGGGG.D','.GGGWKGGGGGGGGDD','GGGGGGGGGGGGGDD.','GLLGGGGGGGGGGDD.','.GLLLLLGGGGGGGDD','..GLLLLLGGGGGG.D','....GGGGGGGGG...','......GGGGG.....'];
+  const FISH_PAL = {G:'#7ac143', D:'#4f8a26', L:'#c4e59e', W:'#e9f4ee', K:'#04131a'};
+  const ICONS = {
+    fresher: ['...XXX...','..X...X..','.X..W..X.','.X.....X.','.X.....X.','..X...X..','...XXX...'],
+    clever:  ['..XXXXX..','.XWXXXXX.','.XWXXXXX.','.XXXXXXX.','..XXXXX..','...XXX...','...WWW...','...WWW...'],
+    subcom:  ['.XX......','XXXX.....','.XX..XX..','....XXXX.','.XX..XX..','XXXX.....','.XX......'],
+    director:['..XXXXX..','.XXXXXXX.','XXWXXXWXX','XXXXXXXXX','.X.X.X.X.','.X.X.X.X.','X..X.X..X','..X...X..'],
+    exec:    ['....X....','...XXX...','..XXXXX..','..XWXWX..','..XXXXX..','.X.X.X.X.','X.X.X.X.X','X..X.X..X'],
+    one:     ['.....W...','....X....','..XXXX...','.XXXXXXX.','XWXXXXXXX','XXX.X.XXX','.XXXXXXXX','..XXXXX..'],
+    miss:    ['...XXX...','..X...X..','.X.X.X.X.','.X..X..X.','.X.X.X.X.','..X...X..','...XXX...']
+  };
+  const HEX = {fresher:'#9fb6c9', clever:'#f49121', subcom:'#4fd6f0', director:'#7ac143', exec:'#a98bff', one:'#ffd100', miss:'#5d7680'};
+  const icon = k => sprite(ICONS[k], {X:HEX[k], W:'#ffffff'}, 9);
+  const CLOUD = ['.....WWWW.........','...WWWWWWWW..WWW..','..WWWWWWWWWWWWWWW.','WWWWWWWWWWWWWWWWWW','.SSSSSSSSSSSSSSSS.'];
+  const BOAT = ['.......R....','.......RR...','.......RRR..','.......K....','.......K....','WWWWWWWWWWWW','.NNNNNNNNNN.','..NNNNNNNN..'];
+  const SPEAKER_ON = sprite(['...X.....','..XX..X..','XXXX...X.','XXXX.X.X.','XXXX.X.X.','XXXX...X.','..XX..X..','...X.....'], {X:'#e9f4ee'});
+  const SPEAKER_OFF = sprite(['...X.....','..XX.....','XXXX.X.X.','XXXX..X..','XXXX..X..','XXXX.X.X.','..XX.....','...X.....'], {X:'#86a6aa'});
+
+  diver.insertAdjacentHTML('afterbegin', sprite(FISH, FISH_PAL));
+  $('ladder').innerHTML = LADDER_ORDER.map(k => { const t = TIERS[k];
+    return `<li style="--tc:${t.color}">${icon(k)}<span><span class="nm">${t.name}</span><span class="ds">${t.desc}</span></span><span class="pt">+${t.pts}<small>${(t.pts*M_PER_PT).toLocaleString('en-AU')}m</small></span></li>`; }).join('');
+  $('dots').innerHTML = SET.map(() => '<i></i>').join('');
+  const dotEls = [...$('dots').children];
+
+  /* ================= the world column ================= */
+  const K = 1.15; // px per metre
+  let html = `<div class="sky"><div class="sun"></div>`;
+  [[6,250,150,70],[55,215,100,95],[28,150,120,80],[72,300,90,60],[-4,330,110,110]].forEach(([l,b,w,d],i) => {
+    html += `<div class="cloud" style="left:${l}%;bottom:${b - 120}px;width:${w}px;animation-duration:${d}s;animation-direction:${i % 2 ? 'alternate-reverse' : 'alternate'}">${sprite(CLOUD,{W:'#ffffff',S:'#d7ecf5'})}</div>`; });
+  html += `</div><div class="surface"></div><div class="boat">${sprite(BOAT,{R:'#7ac143',K:'#2a2a2a',W:'#e9f4ee',N:'#1d3a46'})}</div>`;
+  html += '<div class="ruler">';
+  for (let m = 50; m <= MAX_DEPTH; m += 50){
+    const big = m % 100 === 0;
+    html += `<i class="${big ? 'big' : ''}" style="top:${m*K}px"></i>`;
+    if (big) html += `<span style="top:${m*K}px">-${m}m</span>`;
+  }
+  html += '</div>';
+  BANDS.slice(1).forEach(b => { html += `<div class="zone" style="top:${b.from*K}px"><b>THE ${b.name}</b></div>`; });
+  FACTS.forEach(([m, t], i) => { html += `<div class="fact ${t.startsWith('──') ? '' : 'r'}" style="top:${m*K}px">${t}</div>`; });
+  column.innerHTML = html;
+
+  /* ================= sound (all synthesised, no files) ================= */
+  const Sound = {
+    ctx:null, master:null, amb:null, muted:false,
+    init(){
+      if (this.ctx) { if (this.ctx.state === 'suspended') this.ctx.resume(); return; }
+      const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return;
+      this.ctx = new AC();
+      this.master = this.ctx.createGain(); this.master.gain.value = this.muted ? 0 : .7;
+      const comp = this.ctx.createDynamicsCompressor(); this.master.connect(comp); comp.connect(this.ctx.destination);
+      this.ambient();
+    },
+    setMuted(m){ this.muted = m; if (this.master) this.master.gain.setTargetAtTime(m ? 0 : .7, this.ctx.currentTime, .05); },
+    tone(f, dur, o = {}){
+      if (!this.ctx) return; const c = this.ctx, t = c.currentTime + (o.at || 0);
+      const osc = c.createOscillator(), g = c.createGain();
+      osc.type = o.type || 'sine'; osc.frequency.setValueAtTime(f, t);
+      if (o.slide) osc.frequency.exponentialRampToValueAtTime(o.slide, t + dur);
+      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(o.vol || .15, t + (o.attack || .006));
+      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      osc.connect(g); g.connect(o.dest || this.master); osc.start(t); osc.stop(t + dur + .05);
+    },
+    noise(dur, o = {}){
+      if (!this.ctx) return; const c = this.ctx, t = c.currentTime + (o.at || 0);
+      const len = Math.floor(c.sampleRate * dur), buf = c.createBuffer(1, len, c.sampleRate), d = buf.getChannelData(0);
+      for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+      const src = c.createBufferSource(); src.buffer = buf;
+      const f = c.createBiquadFilter(); f.type = 'lowpass'; f.Q.value = o.q || 1;
+      f.frequency.setValueAtTime(o.from || 1000, t); f.frequency.exponentialRampToValueAtTime(o.to || 200, t + dur);
+      const g = c.createGain(); g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(o.vol || .1, t + (o.attack || .05)); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      src.connect(f); f.connect(g); g.connect(this.master); src.start(t); src.stop(t + dur);
+    },
+    ambient(){
+      const c = this.ctx, out = c.createGain(); out.gain.value = .0001; out.connect(this.master);
+      out.gain.exponentialRampToValueAtTime(.5, c.currentTime + 3);
+      const lp = c.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 420; lp.connect(out);
+      const o1 = c.createOscillator(), o2 = c.createOscillator(), og = c.createGain();
+      o1.frequency.value = 55; o2.frequency.value = 55.6; og.gain.value = .05;
+      o1.connect(og); o2.connect(og); og.connect(lp); o1.start(); o2.start();
+      const len = c.sampleRate * 3, buf = c.createBuffer(1, len, c.sampleRate), d = buf.getChannelData(0);
+      let last = 0; for (let i = 0; i < len; i++){ last = (last + .02 * (Math.random() * 2 - 1)) / 1.02; d[i] = last * 3.5; }
+      const n = c.createBufferSource(); n.buffer = buf; n.loop = true;
+      const ng = c.createGain(); ng.gain.value = .07; n.connect(ng); ng.connect(lp); n.start();
+      const lfo = c.createOscillator(), lg = c.createGain(); lfo.frequency.value = .08; lg.gain.value = 140; lfo.connect(lg); lg.connect(lp.frequency); lfo.start();
+      this.amb = {lp, o1, o2};
+    },
+    depth(m){ if (!this.amb) return; const t = Math.min(1, m / MAX_DEPTH), c = this.ctx.currentTime;
+      this.amb.lp.frequency.setTargetAtTime(420 - 260 * t, c, .8); this.amb.o1.frequency.setTargetAtTime(55 - 14 * t, c, .8); this.amb.o2.frequency.setTargetAtTime(55.6 - 14 * t, c, .8); },
+    splash(){ this.noise(.9, {from:4000, to:300, vol:.18, attack:.01}); for (let i = 0; i < 6; i++) this.tone(300 + Math.random() * 500, .12, {at:.15 + i * .07, slide:900 + Math.random() * 600, vol:.04}); },
+    ping(){ this.tone(1175, 1.4, {vol:.09}); this.tone(1175, 1.1, {vol:.035, at:.42}); this.tone(1175, .8, {vol:.015, at:.84}); },
+    tick(hot){ this.tone(hot ? 990 : 660, .06, {type:'square', vol:hot ? .04 : .02}); },
+    key(){ this.tone(1500 + Math.random() * 400, .025, {type:'square', vol:.008}); },
+    reject(){ this.tone(240, .22, {type:'triangle', vol:.13, slide:120}); this.tone(180, .25, {type:'triangle', vol:.08, at:.08, slide:90}); },
+    confirm(){ this.tone(660, .09, {type:'triangle', vol:.08}); this.tone(880, .12, {type:'triangle', vol:.08, at:.08}); },
+    sink(dur){ this.noise(dur, {from:900, to:120, vol:.11, attack:.15}); for (let i = 0; i < 10; i++) this.tone(260 + Math.random() * 300, .1, {at:Math.random() * dur * .8, slide:700 + Math.random() * 700, vol:.03}); },
+    pass(i){ const notes = [523, 587, 659, 784, 880, 1047]; this.tone(notes[i] || 1047, .35, {type:'triangle', vol:.07}); },
+    land(k){
+      const idx = LADDER_ORDER.indexOf(k), scale = [392, 523, 659, 784, 988, 1175, 1568];
+      for (let i = 0; i <= idx + 1; i++) this.tone(scale[i], .5, {type:'triangle', vol:.08, at:i * .07});
+      if (k === 'exec' || k === 'one'){ this.tone(98, 1.6, {vol:.12, attack:.05}); this.tone(147, 1.6, {vol:.06, attack:.05}); }
+      if (k === 'one'){ [1568, 1976, 2349, 3136].forEach((f, i) => this.tone(f, .6, {vol:.05, at:.5 + i * .09})); }
+    },
+    miss(){ this.tone(196, .5, {type:'triangle', vol:.1, slide:98}); this.noise(.5, {from:400, to:100, vol:.05}); },
+    surface(){ [523, 659, 784, 1047, 784, 1047, 1319].forEach((f, i) => this.tone(f, .3, {type:'triangle', vol:.07, at:i * .1})); }
+  };
+  try { Sound.muted = localStorage.getItem('deepend:muted') === '1'; } catch(e) {}
+  const muteBtn = $('muteBtn');
+  function paintMute(){ muteBtn.innerHTML = Sound.muted ? SPEAKER_OFF : SPEAKER_ON; muteBtn.setAttribute('aria-pressed', String(Sound.muted)); muteBtn.setAttribute('aria-label', Sound.muted ? 'Turn sound on' : 'Mute sound'); }
+  paintMute();
+  muteBtn.addEventListener('click', () => { Sound.init(); Sound.setMuted(!Sound.muted); paintMute(); try { localStorage.setItem('deepend:muted', Sound.muted ? '1' : '0'); } catch(e) {} });
+
+  /* ================= camera, depth and background ================= */
+  let H = 0, W = 0, dpr = 1;
+  let shownDepth = 0, anchor = .62, anchorTarget = .62;
+  let tween = null;                       // {from, to, t0, dur, onStep, done}
+  let velocity = 0;
+  const WATER = [[0,[22,96,130]],[600,[14,62,96]],[1500,[9,38,64]],[3000,[6,20,38]],[4500,[8,10,26]],[7000,[18,4,12]]];
+  function waterAt(m){
+    for (let i = 1; i < WATER.length; i++){ const [d1, c1] = WATER[i - 1], [d2, c2] = WATER[i];
+      if (m <= d2){ const t = (m - d1) / (d2 - d1); return c1.map((v, j) => Math.round(v + (c2[j] - v) * t)); } }
+    return WATER[WATER.length - 1][1];
+  }
+  const diverY = () => H * anchor;
+  function render(){
+    const y = diverY() - shownDepth * K;
+    column.style.transform = `translate3d(0,${y.toFixed(1)}px,0)`;
+    diver.style.top = diverY() + 'px';
+    $('you').style.top = diverY() + 'px';
+    $('banner').style.top = (diverY() + 34) + 'px';
+    const top = waterAt(Math.max(0, shownDepth - H * anchor / K)), bot = waterAt(shownDepth + H * (1 - anchor) / K);
+    scene.style.background = `linear-gradient(to bottom, rgb(${top}) 0%, rgb(${bot}) 100%)`;
+    const d = Math.round(shownDepth);
+    const dn = $('depthNum'); if (dn.textContent !== d.toLocaleString('en-AU')) dn.textContent = d.toLocaleString('en-AU');
+  }
+  function easeInOut(p){ return p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2; }
+  function tweenDepth(to, dur, onStep){
+    return new Promise(res => {
+      if (reduce){ shownDepth = to; onStep && onStep(to); render(); res(); return; }
+      tween = {from: shownDepth, to, t0: performance.now(), dur, onStep, done: res};
+    });
+  }
+
+  /* ----- canvas: light rays, kelp, fish silhouettes, marine snow ----- */
+  const ctx = canvas.getContext('2d');
+  let snow = [], fishes = [], kelp = [];
+  function resize(){
+    dpr = Math.min(2, window.devicePixelRatio || 1);
+    W = scene.clientWidth; H = scene.clientHeight;
+    canvas.width = W * dpr; canvas.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    snow = Array.from({length: Math.round(W * H / 4200)}, () => ({x:Math.random() * W, y:Math.random() * H, s:Math.random() < .2 ? 3 : 2, a:.1 + Math.random() * .4, v:.06 + Math.random() * .2, z:.4 + Math.random() * .9}));
+    kelp = Array.from({length: 7}, (_, i) => ({x: (i < 4 ? i * 22 : W - (i - 3) * 24) + Math.random() * 10, h: 90 + Math.random() * 120, ph: Math.random() * 6}));
+    render();
+  }
+  function spawnFish(){
+    const dir = Math.random() < .5 ? 1 : -1, size = 6 + Math.random() * 10;
+    fishes.push({x: dir > 0 ? -30 : W + 30, y: 60 + Math.random() * (H - 140), dir, size, v: .3 + Math.random() * .6, school: Math.random() < .35 ? 3 + Math.floor(Math.random() * 4) : 1, wob: Math.random() * 6});
+  }
+  function drawFish(f, a, t){
+    ctx.fillStyle = `rgba(2,10,16,${a})`;
+    for (let n = 0; n < f.school; n++){
+      const ox = n * f.size * 2.2 * -f.dir, oy = Math.sin(n * 1.7 + f.wob) * f.size * 1.4;
+      const x = Math.round(f.x + ox), y = Math.round(f.y + oy + Math.sin(t / 600 + f.wob + n) * 2), s = f.size;
+      ctx.fillRect(x - s, y - s * .35, s * 2, s * .7);
+      ctx.fillRect(x - s * .6, y - s * .55, s * 1.2, s * 1.1);
+      const tx = f.dir > 0 ? x - s - s * .5 : x + s;
+      ctx.fillRect(tx, y - s * .45, s * .5, s * .9);
+    }
+  }
+  let last = performance.now();
+  function frame(t){
+    const dt = Math.min(50, t - last); last = t;
+    // tweens
+    if (tween){
+      const p = Math.min(1, (t - tween.t0) / tween.dur), prev = shownDepth;
+      shownDepth = tween.from + (tween.to - tween.from) * easeInOut(p);
+      velocity = (shownDepth - prev) * K;
+      tween.onStep && tween.onStep(shownDepth);
+      if (p >= 1){ const done = tween.done; tween = null; done(); }
+    } else velocity *= .9;
+    if (Math.abs(anchor - anchorTarget) > .0005) anchor += (anchorTarget - anchor) * (reduce ? 1 : Math.min(1, dt / 220));
+    render();
+    // canvas
+    ctx.clearRect(0, 0, W, H);
+    const surfaceY = diverY() - shownDepth * K;
+    const wTop = Math.max(0, surfaceY);
+    // light rays near the surface
+    const rayA = Math.max(0, 1 - shownDepth / 900) * .16;
+    if (rayA > .005){
+      for (let i = 0; i < 5; i++){
+        const x0 = W * (.1 + i * .2) + Math.sin(t / 3000 + i) * 30;
+        const g = ctx.createLinearGradient(0, wTop, 0, wTop + H * .9);
+        g.addColorStop(0, `rgba(200,240,255,${rayA})`); g.addColorStop(1, 'rgba(200,240,255,0)');
+        ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(x0, wTop); ctx.lineTo(x0 + 26, wTop); ctx.lineTo(x0 + 110, wTop + H * .9); ctx.lineTo(x0 + 40, wTop + H * .9); ctx.closePath(); ctx.fill();
+      }
+    }
+    // kelp anchored to the screen bottom in the shallows
+    const kA = Math.max(0, 1 - shownDepth / 1400) * .75;
+    if (kA > .01){
+      ctx.fillStyle = `rgba(3,22,26,${kA})`;
+      for (const k of kelp){
+        for (let y = 0; y < k.h; y += 6){
+          const sway = Math.sin(t / 900 + k.ph + y / 30) * (y / k.h) * 12;
+          ctx.fillRect(Math.round(k.x + sway), Math.round(H - y), 6, 6);
+          if (y % 24 === 0 && y > 10) ctx.fillRect(Math.round(k.x + sway + (y % 48 ? 6 : -8)), Math.round(H - y), 8, 4);
+        }
+      }
+    }
+    // fish silhouettes (more in mid water)
+    const fishA = shownDepth < 50 ? .25 : Math.max(.12, .45 - shownDepth / 16000);
+    if (!reduce && fishes.length < 6 && Math.random() < dt / 2600) spawnFish();
+    fishes = fishes.filter(f => f.x > -120 && f.x < W + 120 && f.y > -60);
+    for (const f of fishes){ f.x += f.dir * f.v * dt / 16; f.y -= velocity * .6 * dt / 16; if (f.y > wTop + 10) drawFish(f, fishA, t); }
+    // marine snow
+    for (const s of snow){
+      s.y -= (s.v + velocity * s.z) * dt / 16;
+      s.x += Math.sin(t / 1800 + s.y * .02) * .08;
+      if (s.y < -4){ s.y = H + 4; s.x = Math.random() * W; }
+      if (s.y > H + 4) s.y = -4;
+      if (s.y < wTop) continue;
+      ctx.fillStyle = `rgba(233,244,238,${s.a})`;
+      ctx.fillRect(Math.round(s.x), Math.round(s.y), s.s, s.s);
+    }
+    requestAnimationFrame(frame);
+  }
+  new ResizeObserver(resize).observe(scene);
+  requestAnimationFrame(frame);
+
+  /* ================= game flow ================= */
+  const els = {card:$('card'), rnd:$('rnd'), prompt:$('promptText'), hint:$('hintText'), land:$('land'), dock:$('dock'),
+    countdown:$('countdown'), playRow:$('playRow'), input:$('answerInput'), msg:$('msg'), time:$('timeDigits'), fuse:$('fuse'),
+    score:$('scoreNum'), banner:$('banner'), you:$('you'), flash:$('flash'), start:$('startScreen'), log:$('logScreen')};
+  let round = 0, results = [], phase = 'start', endAt = 0, pending = null, lastSec = 99, roundLines = [], typeTimer = null;
+  const totalPts = () => results.reduce((s, r) => s + r.pts, 0);
+  const show = (el, on) => { el.hidden = !on; };
+  const sleep = ms => new Promise(r => setTimeout(r, reduce ? Math.min(ms, 50) : ms));
+  function setMsg(text, cls){ els.msg.textContent = text || ''; els.msg.className = cls || ''; }
+  function flash(color){ els.flash.style.setProperty('--tc', color); els.flash.classList.remove('go'); void els.flash.offsetWidth; els.flash.classList.add('go'); }
+  function countScore(from, to){
+    const t0 = performance.now(), dur = 700;
+    const step = t => { const p = Math.min(1, (t - t0) / dur); els.score.textContent = Math.round(from + (to - from) * p);
+      els.score.classList.remove('crank'); void els.score.offsetWidth; els.score.classList.add('crank'); if (p < 1) requestAnimationFrame(step); };
+    requestAnimationFrame(step);
+  }
+  function paintDots(){
+    dotEls.forEach((d, i) => { d.className = ''; d.style.removeProperty('--tc');
+      if (results[i]){ d.classList.add('done'); d.style.setProperty('--tc', TIERS[results[i].tier].color); }
+      else if (i === round && phase !== 'done') d.classList.add('now'); });
+    $('count').textContent = `PROMPT ${Math.min(round + 1, SET.length)} OF ${SET.length}`;
+  }
+
+  async function startDive(){
+    Sound.init(); Sound.splash();
+    round = 0; results = []; els.score.textContent = '0';
+    show(els.start, false); show(els.log, false);
+    scene.classList.remove('at-start');
+    anchorTarget = .44;
+    diver.style.left = '44%';
+    phase = 'descending'; paintDots();
+    await tweenDepth(0, 10);
+    beginRound();
+  }
+
+  function typeOut(el, text){
+    clearInterval(typeTimer);
+    if (reduce){ el.textContent = text; return; }
+    let i = 0; el.innerHTML = '<span class="caret"></span>';
+    typeTimer = setInterval(() => { i++; el.innerHTML = text.slice(0, i).replace(/</g, '&lt;') + (i < text.length ? '<span class="caret"></span>' : '');
+      if (i % 2) Sound.key(); if (i >= text.length) clearInterval(typeTimer); }, 28);
+  }
+
+  async function beginRound(){
+    const p = SET[round];
+    phase = 'countdown'; pending = null;
+    roundLines.forEach(l => { l.classList.add('gone'); setTimeout(() => l.remove(), 600); }); roundLines = [];
+    show(els.land, false); show(els.banner, false); show(els.you, false);
+    paintDots();
+    els.rnd.textContent = `PROMPT ${round + 1} OF ${SET.length}`;
+    els.prompt.textContent = '';
+    show(els.card, true); els.card.classList.add('out'); void els.card.offsetWidth; els.card.classList.remove('out');
+    typeOut(els.prompt, p.prompt);
+    els.hint.textContent = p.hint;
+    show(els.dock, true); show(els.countdown, true); show(els.playRow, false); setMsg('');
+    Sound.ping();
+    // drift down a little while the clock warms up
+    tweenDepth(shownDepth, 10);
+    for (let n = PREVIEW_S; n > 0; n--){ els.countdown.innerHTML = `descending · the clock starts in <b>${n}</b>`; await sleep(1000); }
+    play();
+  }
+
+  function play(){
+    phase = 'play'; lastSec = 99;
+    show(els.countdown, false); show(els.playRow, true);
+    els.input.value = ''; els.input.disabled = false; els.input.focus();
+    endAt = performance.now() + ROUND_MS;
+    requestAnimationFrame(timerLoop);
+  }
+  function timerLoop(){
+    if (phase !== 'play') return;
+    const left = Math.max(0, endAt - performance.now()), sec = Math.ceil(left / 1000);
+    els.time.textContent = sec;
+    els.fuse.style.transform = `scaleX(${left / ROUND_MS})`;
+    const hot = left <= 5000; els.dock.classList.toggle('hot', hot);
+    if (sec !== lastSec){ if (sec <= 5 && sec > 0) Sound.tick(true); lastSec = sec; }
+    if (left <= 0){ finishRound(null, ''); return; }
+    requestAnimationFrame(timerLoop);
+  }
+
+  function blub(text){ const b = $('blub'); b.textContent = text; b.classList.add('on'); clearTimeout(blub.t); blub.t = setTimeout(() => b.classList.remove('on'), 1400); }
+
+  function submit(e){
+    e.preventDefault();
+    if (phase !== 'play') return;
+    const raw = els.input.value.trim();
+    if (!raw) return;
+    if (pending && normKey(raw) === pending.key){ Sound.confirm(); finishRound(pending.answer, raw); return; }
+    const m = findMatch(INDEXES[round], raw);
+    if (m && m.exact){ finishRound(m.answer, raw); return; }
+    if (m){
+      pending = {answer: m.answer, key: normKey(raw)};
+      Sound.confirm();
+      setMsg(`did you mean “${m.answer.name}”? · hit DIVE again to confirm, or edit`, 'fix');
+      return;
+    }
+    pending = null;
+    Sound.reject(); blub('blub?');
+    diver.classList.remove('sad'); void diver.offsetWidth; diver.classList.add('sad');
+    setMsg(`“${raw}”: no echo. try again`, 'bad');
+    els.input.classList.remove('reject'); void els.input.offsetWidth; els.input.classList.add('reject');
+    els.input.select();
+  }
+
+  async function finishRound(answer, raw){
+    if (phase !== 'play') return;
+    phase = 'sinking';
+    els.input.disabled = true; els.input.blur();
+    els.dock.classList.remove('hot');
+    const tierKey = answer ? answer.tier : 'miss', t = TIERS[tierKey];
+    const startDepth = shownDepth, prevPts = totalPts();
+    results.push({q: SET[round].prompt, typed: raw, answer: answer ? answer.name : null, tier: tierKey, pts: t.pts});
+    show(els.dock, false);
+    els.card.classList.add('out');
+
+    // lay out this round's tier lines below the diver
+    LADDER_ORDER.forEach((k, i) => {
+      const tt = TIERS[k], el = document.createElement('div');
+      el.className = 'tline'; el.dataset.depth = startDepth + tt.pts * M_PER_PT; el.dataset.i = i;
+      el.style.top = (startDepth + tt.pts * M_PER_PT) * K + 'px'; el.style.setProperty('--tc', tt.color);
+      el.innerHTML = `<span class="tag">${icon(k)}${tt.name} · ${tt.pts}</span>`;
+      column.appendChild(el); roundLines.push(el);
+    });
+
+    if (answer){
+      els.banner.style.setProperty('--tc', t.color);
+      els.banner.textContent = `“${answer.name.toUpperCase()}” ▼`;
+      show(els.banner, true); els.banner.classList.remove('in'); void els.banner.offsetWidth; els.banner.classList.add('in');
+      await sleep(550);
+      const target = startDepth + t.pts * M_PER_PT, dur = 900 + t.pts * 18;
+      diver.classList.add('sinking'); Sound.sink(dur / 1000);
+      await tweenDepth(target, dur, d => {
+        roundLines.forEach(l => { if (!l.classList.contains('passed') && d >= +l.dataset.depth - .5){ l.classList.add('passed'); Sound.pass(+l.dataset.i); } });
+      });
+      diver.classList.remove('sinking');
+      const hitLine = roundLines.find(l => +l.dataset.depth === target);
+      if (hitLine) hitLine.classList.add('hit');
+      roundLines.forEach(l => { if (l !== hitLine && !l.classList.contains('passed')) l.classList.add('gone'); });
+      flash(t.color); Sound.land(tierKey);
+      if (tierKey === 'one' || tierKey === 'exec'){ scene.classList.remove('shake'); void scene.offsetWidth; scene.classList.add('shake'); }
+      Sound.depth(shownDepth);
+      countScore(prevPts, totalPts());
+      show(els.you, true);
+      await sleep(250);
+      show(els.banner, false);
+    } else {
+      Sound.miss(); blub('blub…');
+      roundLines.forEach(l => l.classList.add('gone'));
+      await sleep(400);
+    }
+    paintDots();
+    // landing panel
+    els.land.style.setProperty('--tc', t.color);
+    $('landIco').innerHTML = icon(tierKey);
+    $('landName').textContent = t.name;
+    $('landAns').textContent = answer ? `“${answer.name}”` : 'no answer locked in';
+    $('landPts').innerHTML = answer ? `<b>+${t.pts} PTS</b> · sink ${(t.pts * M_PER_PT).toLocaleString('en-AU')}m` : 'no points this time';
+    $('landQuip').textContent = t.quip;
+    $('nextBtn').textContent = round + 1 < SET.length ? 'DESCEND ▼' : 'SEE DIVE LOG ▲';
+    show(els.land, true); els.land.classList.remove('in'); void els.land.offsetWidth; els.land.classList.add('in');
+    phase = 'landed';
+    $('nextBtn').focus({preventScroll: true});
+  }
+
+  function next(){
+    if (phase !== 'landed') return;
+    round++;
+    if (round < SET.length) beginRound(); else endDive();
+  }
+
+  function endDive(){
+    phase = 'done';
+    show(els.card, false); show(els.dock, false); show(els.land, false); show(els.you, false);
+    Sound.surface();
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(results)); } catch(e) {}
+    paintDots();
+    renderLog();
+  }
+
+  function renderLog(){
+    const pts = totalPts(), depth = pts * M_PER_PT, band = bandFor(depth);
+    $('sumDepth').textContent = depth.toLocaleString('en-AU') + 'm';
+    $('sumScore').textContent = pts;
+    $('bandName').textContent = 'THE ' + band.name; $('bandName').style.setProperty('--tc', band.color);
+    $('bandDesc').textContent = band.desc;
+    const top = 18, h = 120, x0 = 46, bw = 30, gap = 8;
+    let svg = `<svg viewBox="0 0 320 172" role="img" aria-label="Points per prompt. Deeper bars are rarer answers.">`;
+    [0,25,50,75,100].forEach(v => { const y = top + v / 100 * h;
+      svg += `<line class="grid" x1="${x0 - 6}" x2="${x0 + 7 * (bw + gap) - gap}" y1="${y}" y2="${y}"/><text class="ax" x="${x0 - 10}" y="${y + 4}" text-anchor="end">${v ? '-' + v : '0'}</text>`; });
+    results.forEach((r, i) => { const x = x0 + i * (bw + gap), bh = r.pts / 100 * h, c = HEX[r.tier];
+      svg += r.pts ? `<rect x="${x}" y="${top}" width="${bw}" height="${bh}" fill="${c}"><title>Prompt ${i + 1}: ${esc(r.answer)}, ${r.pts} pts</title></rect>`
+                   : `<rect x="${x}" y="${top}" width="${bw}" height="3" fill="${c}"><title>Prompt ${i + 1}: miss</title></rect>`;
+      svg += `<text class="ax" x="${x + bw / 2}" y="${top + h + 22}" text-anchor="middle">${i + 1}</text>`; });
+    svg += `<text class="ax" x="${x0 - 10}" y="${top + h + 22}" text-anchor="end">pts</text></svg>`;
+    $('chart').innerHTML = svg;
+    $('roundList').innerHTML = results.map((r, i) => { const t = TIERS[r.tier];
+      return `<li style="--tc:${t.color}"><span class="q">${i + 1}. ${esc(r.q)}</span><span class="a">${r.answer ? esc(r.answer) : '—'}<small>${t.name}</small></span><span class="p">+${r.pts}</span></li>`; }).join('');
+    $('shareText').textContent = `Deep End 🐟\n${depth.toLocaleString('en-AU')}m · ${titleCase(band.name)}\n${results.map(r => TIERS[r.tier].emoji).join('')}\n\n${EVENT_LABEL}${SHARE_URL ? '\n' + SHARE_URL : ''}`;
+    $('copyStatus').textContent = '';
+    $('deepestList').innerHTML = INDEXES.map((idx, i) => { const one = idx.list.find(a => a.tier === 'one');
+      return `<li><span>${i + 1}. ${esc(SET[i].prompt)}</span><span>${one ? esc(one.name) : '—'}</span></li>`; }).join('');
+    show(els.log, true); els.log.scrollTop = 0;
+  }
+  function esc(s){ return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+  function titleCase(s){ return s.toLowerCase().replace(/\b[a-z]/g, c => c.toUpperCase()); }
+
+  /* ================= wiring ================= */
+  $('startBtn').addEventListener('click', () => {
+    if (results.length === SET.length){ show(els.start, false); show(els.log, true); scene.classList.remove('at-start'); return; }
+    startDive();
+  });
+  $('nextBtn').addEventListener('click', next);
+  document.addEventListener('keydown', e => { if (e.key === 'Enter' && phase === 'landed' && document.activeElement !== $('nextBtn')){ e.preventDefault(); next(); } });
+  $('answerForm').addEventListener('submit', submit);
+  els.input.addEventListener('input', () => {
+    if (phase === 'play') Sound.key();
+    if (pending && normKey(els.input.value) !== pending.key){ pending = null; setMsg(''); }
+  });
+  $('helpBtn').addEventListener('click', () => {
+    if (phase !== 'start' && phase !== 'done') return;
+    show(els.log, false); show(els.start, true); $('howto').open = true;
+    $('startBtn').textContent = results.length === SET.length ? '▲ BACK TO DIVE LOG ▲' : '▼ BEGIN DESCENT ▼';
+  });
+  $('copyBtn').addEventListener('click', () => {
+    const text = $('shareText').textContent;
+    const done = ok => { $('copyStatus').textContent = ok ? 'Copied. Paste it in the Discord.' : 'Select the text above and copy it.'; };
+    const sel = () => { const r = document.createRange(); r.selectNodeContents($('shareText')); const s = getSelection(); s.removeAllRanges(); s.addRange(r); };
+    try { navigator.clipboard.writeText(text).then(() => done(true), () => { sel(); done(false); }); } catch(e){ sel(); done(false); }
+  });
+  $('replayBtn').addEventListener('click', async () => {
+    try { localStorage.removeItem(STORE_KEY); } catch(e) {}
+    results = []; round = 0; phase = 'start'; paintDots(); els.score.textContent = '0';
+    show(els.log, false);
+    anchorTarget = .62;
+    await tweenDepth(0, 1600);
+    scene.classList.add('at-start'); show(els.start, true); $('startBtn').textContent = '▼ BEGIN DESCENT ▼';
+  });
+
+  paintDots();
+
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORE_KEY) || 'null');
+    if (Array.isArray(saved) && saved.length === SET.length){
+      results = saved; phase = 'done'; round = SET.length;
+      show(els.start, false); scene.classList.remove('at-start'); anchor = anchorTarget = .44;
+      els.score.textContent = totalPts(); paintDots();
+      shownDepth = totalPts() * M_PER_PT;
+      renderLog();
+    }
+  } catch(e) {}
+})();
+</script>
+
+</body>
+</html>
