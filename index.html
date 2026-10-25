@@ -330,7 +330,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
         <a class="fsbtn" id="fsStart" href="#" target="_blank" rel="noopener" hidden></a>
         <div class="start-meta"><span id="diveNo">Arc Clubs Training 2026</span><span>7 PROMPTS</span></div>
         <p class="credit">Deep End is a loving rip-off of <a href="https://krillion.io" target="_blank" rel="noopener">Krillion</a>. Go play the original at krillion.io ↗</p>
-        <p class="ph">[PLACEHOLDER DATA] Rarity for the Arc Sport and campus spaces prompts is a best guess for now.</p>
+        <p class="ph">[PLACEHOLDER DATA] Rarity for the Arc Sport and campus spaces prompts is a best guess.</p>
       </div>
     </section>
 
@@ -350,8 +350,9 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
           <div id="copyStatus" aria-live="polite"></div>
         </div>
         <div class="deepest"><h3>THE HIDDEN GEMS</h3><ul id="deepestList"></ul></div>
-                <div class="share"><div class="row"><button class="ghost" id="replayBtn" type="button">Dive again</button></div></div>
-        <p class="ph">[PLACEHOLDER DATA] Rarity for the Arc Sport and campus spaces prompts is a best guess for now.</p>
+                <div class="share" id="exitRow" hidden><div class="row"><button class="btn" id="exitFsBtn" type="button" hidden>EXIT FULL SCREEN</button><a class="btn" id="backArc" target="_top" hidden>◀ BACK TO THE ARC PAGE</a></div></div>
+        <p class="credit" style="background:none">One dive per person. Your result is saved on this device.</p>
+        <p class="ph">[PLACEHOLDER DATA] Rarity for the Arc Sport and campus spaces prompts is a best guess.</p>
         <p class="credit">Deep End is a loving rip-off of <a href="https://krillion.io" target="_blank" rel="noopener">Krillion</a>. Go play the original at krillion.io ↗</p>
       </div>
     </section>
@@ -389,7 +390,8 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
    ===================================================================== */
 const EVENT_LABEL = 'Arc Clubs Training 2026';  // shown on the start screen and in copied results
 const PREVIEW_MODE = false;       // true = shows the [PLACEHOLDER] notes. Set to false once you're happy with the answer lists.
-const SHARE_URL = 'https://arclubs.github.io/Arc-Clubs-Deep-End/';           // [GITHUB URL] e.g. 'https://arcclubs.github.io/deep-end/'. Added to the bottom of copied results.
+const SHARE_URL = 'https://www.arc.unsw.edu.au/clubs/club-forms/agms-and-reaffiliation-resources/club-executives-training/executive-onboarding-training/deep-end-game';  // Arc page with the game. Added to copied results.
+const GAME_URL = 'https://arclubs.github.io/Arc-Clubs-Deep-End/';  // where the game itself lives (used by 'Open full screen' on iPhone)
 
 const ROLE_GENERIC = ['vice','president','pres','vp','vicepresident','vicepres','copresident','copres','vps','director','directors','head','officer','officers','of','and','the','co','chief','lead','leader','manager','coordinator','convenor','convener','executive','exec','rep','representative','portfolio','team','chair','chairperson','senior','junior','assistant','deputy','general','for','in','on','subcommittee','subcom','member','role','arc'];
 
@@ -925,46 +927,47 @@ North America | one | north american, usa, america, american, canada, canadian`
 },
 {
   prompt: 'Name an Arc Sport Club',
-  hint: '▼ the sport is enough ▼',
+  hint: '▼ the sport is enough · rarer sports sink deeper ▼',
   strip: ['the','unsw','club','and','men','mens','women','womens','arc','sport'],
   answers: `
-Football | fresher | soccer
-Basketball | fresher | bball
-Volleyball | fresher | volley
-Badminton | fresher |
-Tennis | subcom |
-Swimming | subcom | swim
+Football (Soccer) | fresher | football, soccer, futsal
+Basketball | fresher | bball, b-ball
+AFL | fresher | aussie rules, australian rules football, footy, australian football
+Cricket | fresher |
+Swimming | fresher | swim
+Tennis | fresher |
 Netball | subcom |
-AFL | subcom | aussie rules, australian rules football
-Rugby Union | subcom | rugby
-Cricket | subcom |
+Rugby Union | subcom | rugby, union
+Volleyball | subcom | volley, beach volleyball
+Badminton | subcom |
+Touch Football | subcom | touch, touch footy
+Athletics | subcom | track, track and field, running
 Table Tennis | subcom | ping pong
-Touch Football | director | touch
+Boxing | subcom | box
 Hockey | director | field hockey
-Boxing & Muay Thai | director | boxing, muay thai
-Rowing | director |
+Cycling & Triathlon | director | cycling, triathlon, bike, biking
+Rowing | director | row
+Water Polo | director | waterpolo
+Taekwondo | director | tkd, tae kwon do
+Karate | director |
+Squash | director |
+Muay Thai | director | thai boxing, kickboxing
+Oztag | director | oz tag
 Archery | director |
-Athletics | director | track, track and field
-Fencing | director |
 Ultimate Frisbee | director | ultimate, frisbee
-Cycling & Triathlon | director | cycling, triathlon
-Taekwondo | director | tkd
-Karate | exec |
-Judo | exec |
+Fencing | director |
+Judo | director |
+Gridiron (American Football) | exec | gridiron, american football
+Lacrosse | exec |
 Kendo | exec |
 Aikido | exec |
-Baseball Softball | exec | baseball, softball
-Squash | exec |
-Gridiron | exec | american football
-Lacrosse | exec |
-Handball | exec |
-Water Polo | exec | waterpolo
-Outdoors | exec | bushwalking, hiking
-Underwater | one | scuba, diving, underwater club
-Underwater Rugby | one |
-Waterski & Wakeboard | one | waterski, water ski, wakeboard, wakeboarding
-Windsurfing, Surfing & Sailing | one | windsurfing, surfing, sailing, surf
-Target Rifle | one | rifle, shooting
+Handball | exec | european handball
+Outdoors | exec | bushwalking, hiking, outdoors club, rock climbing, canyoning
+Windsurfing, Surfing & Sailing | exec | windsurfing, surfing, sailing, surf, windsurf
+Waterski & Wakeboard | exec | waterski, water ski, water skiing, wakeboard, wakeboarding
+Underwater | one | scuba, diving, scuba diving, underwater club, freediving
+Underwater Rugby | one | uwr
+Target Rifle | one | rifle, shooting, target shooting
 Taido | one |`
 },
 {
@@ -1244,7 +1247,9 @@ function sydneyParts(date){
 
   const SET = DAILY_SETS[0];
   const INDEXES = SET.map(buildIndex);
-  const STORE_KEY = 'deepend:v3:result';
+  const STORE_KEY = 'deepend:v4:result', PROGRESS_KEY = 'deepend:v4:progress';
+  if (location.hash === '#reset'){ try { localStorage.removeItem(STORE_KEY); localStorage.removeItem(PROGRESS_KEY); } catch(e) {} }  // testing only: add #reset to the game link
+  const saveProgress = open => { try { localStorage.setItem(PROGRESS_KEY, JSON.stringify({results, open})); } catch(e) {} };
   $('diveNo').textContent = EVENT_LABEL;
   if (!PREVIEW_MODE){ document.querySelectorAll('.ph').forEach(e => e.remove()); }
 
@@ -1378,9 +1383,9 @@ function sydneyParts(date){
     fsBtn.addEventListener('click', () => { isFS() ? exitFS() : enterFS(); });
     document.addEventListener('fullscreenchange', paintFS); document.addEventListener('webkitfullscreenchange', paintFS);
     if (embedded){ fsStart.hidden = false; fsStart.removeAttribute('href'); fsStart.setAttribute('role','button'); fsStart.innerHTML = EXPAND + 'PLAY FULL SCREEN'; fsStart.addEventListener('click', e => { e.preventDefault(); enterFS(); }); }
-  } else if (embedded && SHARE_URL){
-    fsLink.hidden = false; fsLink.href = SHARE_URL; fsLink.innerHTML = EXPAND;
-    fsStart.hidden = false; fsStart.href = SHARE_URL; fsStart.innerHTML = EXPAND + 'OPEN FULL SCREEN';
+  } else if (embedded && GAME_URL){
+    fsLink.hidden = false; fsLink.href = GAME_URL + '?from=arc'; fsLink.innerHTML = EXPAND;
+    fsStart.hidden = false; fsStart.href = GAME_URL + '?from=arc'; fsStart.innerHTML = EXPAND + 'OPEN FULL SCREEN';
   }
   muteBtn.addEventListener('click', () => { Sound.init(); Sound.setMuted(!Sound.muted); paintMute(); try { localStorage.setItem('deepend:muted', Sound.muted ? '1' : '0'); } catch(e) {} });
 
@@ -1525,13 +1530,14 @@ function sydneyParts(date){
 
   async function startDive(){
     Sound.init(); Sound.splash();
-    round = 0; results = []; els.score.textContent = '0';
+    const resume = results.length > 0 && results.length < SET.length;
+    if (!resume){ round = 0; results = []; els.score.textContent = '0'; }
     show(els.start, false); show(els.log, false);
     scene.classList.remove('at-start');
     anchorTarget = .44;
     diver.style.left = '44%';
     phase = 'descending'; paintDots();
-    await tweenDepth(0, 10);
+    await tweenDepth(resume ? shownDepth : 0, 10);
     beginRound();
   }
 
@@ -1549,6 +1555,7 @@ function sydneyParts(date){
     roundLines.forEach(l => { l.classList.add('gone'); setTimeout(() => l.remove(), 600); }); roundLines = [];
     show(els.land, false); show(els.banner, false); show(els.you, false);
     paintDots();
+    saveProgress(round);
     els.rnd.textContent = `PROMPT ${round + 1} OF ${SET.length}`;
     els.prompt.textContent = '';
     show(els.card, true); els.card.classList.add('out'); void els.card.offsetWidth; els.card.classList.remove('out');
@@ -1613,6 +1620,7 @@ function sydneyParts(date){
     const tierKey = answer ? answer.tier : 'miss', t = TIERS[tierKey];
     const startDepth = shownDepth, prevPts = totalPts();
     results.push({q: SET[round].prompt, typed: raw, answer: answer ? answer.name : null, tier: tierKey, pts: t.pts});
+    saveProgress(null);
     show(els.dock, false);
     els.card.classList.add('out');
 
@@ -1675,7 +1683,7 @@ function sydneyParts(date){
     phase = 'done';
     show(els.card, false); show(els.dock, false); show(els.land, false); show(els.you, false);
     Sound.surface();
-    try { localStorage.setItem(STORE_KEY, JSON.stringify(results)); } catch(e) {}
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(results)); localStorage.removeItem(PROGRESS_KEY); } catch(e) {}
     paintDots();
     renderLog();
   }
@@ -1723,7 +1731,7 @@ function sydneyParts(date){
   $('helpBtn').addEventListener('click', () => {
     if (phase !== 'start' && phase !== 'done') return;
     show(els.log, false); show(els.start, true); $('howto').open = true;
-    $('startBtn').textContent = results.length === SET.length ? '▲ BACK TO DIVE LOG ▲' : '▼ BEGIN DESCENT ▼';
+    $('startBtn').textContent = results.length === SET.length ? '▲ BACK TO DIVE LOG ▲' : results.length ? `▼ CONTINUE DIVE (${results.length}/${SET.length}) ▼` : '▼ BEGIN DESCENT ▼';
   });
   $('copyBtn').addEventListener('click', () => {
     const text = $('shareText').textContent;
@@ -1731,21 +1739,30 @@ function sydneyParts(date){
     const sel = () => { const r = document.createRange(); r.selectNodeContents($('shareText')); const s = getSelection(); s.removeAllRanges(); s.addRange(r); };
     try { navigator.clipboard.writeText(text).then(() => done(true), () => { sel(); done(false); }); } catch(e){ sel(); done(false); }
   });
-  $('replayBtn').addEventListener('click', async () => {
-    try { localStorage.removeItem(STORE_KEY); } catch(e) {}
-    results = []; round = 0; phase = 'start'; paintDots(); els.score.textContent = '0';
-    show(els.log, false);
-    anchorTarget = .62;
-    await tweenDepth(0, 1600);
-    scene.classList.add('at-start'); show(els.start, true); $('startBtn').textContent = '▼ BEGIN DESCENT ▼';
-  });
+  /* end-screen exits: leave full screen, or go back to the Arc page when the game was opened in its own tab */
+  const fromArc = !embedded && /[?&]from=arc/.test(location.search);
+  function paintExit(){ const fs = isFS(); $('exitFsBtn').hidden = !fs; $('backArc').hidden = !(fromArc && SHARE_URL && !fs); $('exitRow').hidden = $('exitFsBtn').hidden && $('backArc').hidden; }
+  if (SHARE_URL) $('backArc').href = SHARE_URL;
+  $('exitFsBtn').addEventListener('click', () => { exitFS(); });
+  document.addEventListener('fullscreenchange', paintExit); document.addEventListener('webkitfullscreenchange', paintExit);
+  paintExit();
 
   paintDots();
 
   try {
     const saved = JSON.parse(localStorage.getItem(STORE_KEY) || 'null');
-    if (Array.isArray(saved) && saved.length === SET.length){
-      results = saved; phase = 'done'; round = SET.length;
+    const prog = JSON.parse(localStorage.getItem(PROGRESS_KEY) || 'null');
+    if (!(Array.isArray(saved) && saved.length === SET.length) && prog && Array.isArray(prog.results)){
+      results = prog.results.slice(0, SET.length);
+      if (prog.open !== null && prog.open === results.length && results.length < SET.length)
+        results.push({q: SET[results.length].prompt, typed: '', answer: null, tier: 'miss', pts: 0});
+      round = results.length; els.score.textContent = totalPts(); shownDepth = totalPts() * M_PER_PT;
+      if (results.length >= SET.length){ try { localStorage.setItem(STORE_KEY, JSON.stringify(results)); localStorage.removeItem(PROGRESS_KEY); } catch(e) {} }
+      else if (results.length){ $('startBtn').textContent = `▼ CONTINUE DIVE (${results.length}/${SET.length}) ▼`; paintDots(); }
+    }
+    const done = JSON.parse(localStorage.getItem(STORE_KEY) || 'null');
+    if (Array.isArray(done) && done.length === SET.length){ results = done;
+      phase = 'done'; round = SET.length;
       show(els.start, false); scene.classList.remove('at-start'); anchor = anchorTarget = .44;
       els.score.textContent = totalPts(); paintDots();
       shownDepth = totalPts() * M_PER_PT;
